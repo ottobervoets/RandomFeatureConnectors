@@ -1,0 +1,55 @@
+
+    # def load_patterns(self, patterns:list):
+    #     for pattern in patterns:
+    #         self.c[self.number_of_patterns_stored] = np.ones(self.N) #start at 1 conceptor
+    #         self.pattern_length[self.number_of_patterns_stored] = len(pattern)
+    #         # conceptor weight adaptation
+    #         z = np.transpose(self.F) @ self.r_initial.copy() #right??
+    #         for t in range(len(pattern)):
+    #             z = self.c[self.number_of_patterns_stored] @ np.transpose(self.F) @ np.tanh(self.W @ self.F @ z +
+    #                                                                                         self.W_in * pattern[t] +
+    #                                                                                        self.b)
+    #             if t > self.washout:
+    #                 self.c[self.number_of_patterns_stored] = self.c[self.number_of_patterns_stored] + self.lr_c*(
+    #                     z**2 - self.c[self.number_of_patterns_stored] * z**2 - self.aperture**-2 * self.c[self.number_of_patterns_stored]
+    #                 )
+    #
+    #         r_collected = []
+    #         z_collected = []
+    #         z = np.transpose(self.F) @ self.r_initial.copy() #right??
+    #         r = self.r_initial.copy()
+    #         for t in range(len(pattern)):
+    #             r = np.tanh(self.W @ self.F @ z + self.W_in * pattern[t] + t)
+    #             z = self.c[self.number_of_patterns_stored] @ np.transpose(self.F) @ r
+    #
+    #             if t > self.washout:
+    #                 r_collected.append(r)
+    #                 z_collected.append(z)
+    #
+    #         # scipy.optimize.minimize()
+    #
+    #
+    #
+    #
+    #
+    #
+    #         self.number_of_patterns_stored += 1
+
+    # def objective_D(self, D_flat):
+    #     D = D_flat.reshape(self.N, self.M)  # Reshape the flattened D into matrix form
+    #     total_loss = 0
+    #     for j in range(num_samples):
+    #         for n in range(1, P.shape[1]):
+    #             p_jn = P[j, n]
+    #             z_jn = Z[j, n - 1]
+    #             # Compute the loss for this sample and timestep
+    #             loss = np.linalg.norm(W_in * p_jn - D @ z_jn) ** 2
+    #             total_loss += loss
+    #     # Add the regularization term
+    #     total_loss += beta ** 2 * np.linalg.norm(D) ** 2
+    #     return total_loss
+
+
+rfc = RFCNetwork(10, 100, 10)
+rfc.r[0] = 1
+print(rfc.r_initial[0])
