@@ -53,3 +53,54 @@
 rfc = RFCNetwork(10, 100, 10)
 rfc.r[0] = 1
 print(rfc.r_initial[0])
+
+
+    def compute_W_out(self, r_recordings, patterns, beta_W_out):
+        res = scipy.optimize.minimize(self.__W_out_objective, x0=self.W_out.flatten(),
+                                      args=(r_recordings, patterns, beta_W_out))
+        print(f"W objective = {self.__W_out_objective(self.D.flatten(), r_recordings, patterns, beta_W_out)}")
+        return res.x.reshape(self.N, self.M)
+
+    def __W_out_objective(self, W_flat, r_recordings, patterns, beta_W_out) -> float:
+        W = W_flat.reshape(self.N, self.M)  # Reshape the flattened D into matrix form
+        total_loss = 0
+        for pattern, r_recording in zip(patterns, r_recordings):
+            for pattern_step, r in zip(pattern, r_recording):
+                total_loss += np.linalg.norm(pattern_step - W @ np.atleast_1d(r), 2)
+        # Add the regularization term
+        total_loss += beta_W_out ** 2 * np.linalg.norm(W, 2)
+        return total_loss
+
+            def compute_D(self, z_recordings, patterns, beta_D):
+        res = scipy.optimize.minimize(self.__D_objective, x0=self.D.flatten(), args=(z_recordings, patterns, beta_D))
+        print(f"D objective = {self.__D_objective(self.D.flatten(), z_recordings, patterns, beta_D)}")
+        return res.x.reshape(self.N, self.M)
+
+    def __D_objective(self, D_flat, z_recordings, patterns, beta_D) -> float:
+
+        D = D_flat.reshape(self.N, self.M)  # Reshape the flattened D into matrix form
+        total_loss = 0
+        for pattern, z_recording in zip(patterns, z_recordings):
+            for pattern_step, z in zip(pattern, z_recording):
+                total_loss += np.linalg.norm(self.W_in * pattern_step - D @ z, 2)
+        # Add the regularization term
+        total_loss += beta_D ** 2 * np.linalg.norm(D, 2)
+        return total_loss
+
+
+        # print(np.repeat(self.W_in, self.number_of_patterns_stored).reshape(self.N * self.number_of_patterns_stored, 1).shape)
+        # print(np.shape(np.hstack(p_recordings)))
+        # y = np.repeat(self.W_in, self.number_of_patterns_stored).reshape(self.N * self.number_of_patterns_stored, 1) @ np.hstack(p_recordi
+        print(np.shape(np.array(p_recordings).flatten()))
+        y = np.repeat(self.W_in, len(p_recordings) * self.N)
+        X = np.hstack(z_recordings)
+
+        print(np.shape(y))
+        print(np.shape(X))
+
+        # print(np.shape(R @ np.transpose(R) - beta_W_out * np.diag(np.ones(self.N))))
+        W_out_2 = (np.invert(R @ np.transpose(R) - beta_W_out * np.diag(np.ones(self.N))) @ R @ np.transpose(Q))
+
+
+
+

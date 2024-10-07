@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# np.random.seed(2)
 def sinus_discrete(n, period=2 * np.pi):
     x = np.arange(0, n)
     y = np.sin(2 * x * np.pi / period)

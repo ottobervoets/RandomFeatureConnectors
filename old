@@ -1,0 +1,128 @@
+
+    def compute_G(self, z_recordings, beta_G):
+        print("G")
+        # print(np.shape(z_recordings[0]))
+        # print(np.shape(self.G))
+        y = [self.G @ np.transpose(z_recoding) for z_recoding in z_recordings]
+        # print(np.shape(np.hstack(y)))
+        y = np.transpose(np.hstack(y))
+        X = np.vstack(z_recordings)
+
+        # print(np.shape(y))
+        # print(np.shape(X))
+
+        ridge = Ridge(alpha=beta_G, fit_intercept=False)
+        ridge.fit(X, y)
+        G_optimized = ridge.coef_
+
+        # print(np.shape(G_optimized))
+        # print(np.sum(np.sum(G_optimized)), np.sum(np.sum(self.G)))
+        return G_optimized
+
+
+    def compute_W_out_matrix(self, r_recordings, patterns, beta_W_out):
+        R = r_recordings.hstack.T
+        print(R.shape)
+
+        pass
+        # todo: possible way to improve
+
+
+
+    def compute_D_ridge(self, z_recordings, patterns, beta_D):
+        # Collect the data in the form A = W_in * pattern_step and Z = z_recordings
+        A_list = []
+        Z_list = []
+        for pattern, z_recording in zip(patterns, z_recordings):
+            for pattern_step, z in zip(pattern, z_recording):
+                A_list.append(self.W_in * pattern_step)
+                Z_list.append(z)
+
+        # Stack them into matrices
+        A = np.vstack(A_list)  # Shape (num_samples, N)
+        Z = np.vstack(Z_list)  # Shape (num_samples, M)
+
+        # Use Ridge regression solver from scikit-learn
+        ridge = Ridge(alpha=beta_D, fit_intercept=False)
+        ridge.fit(Z, A)
+
+        # Reshape the result back to the shape of D
+        D_optimized = ridge.coef_  # Ridge gives the transpose, so we need to transpose it back
+
+        return D_optimized
+    def compute_D_rige_2(self, z_recordings, p_recordings, beta_D):
+        Q = np.reshape(np.hstack(p_recordings), (1, len(p_recordings) * len(p_recordings[0])))
+        print("Q, W", np.shape(self.W_in), np.shape(Q))
+        Q = np.outer(self.W_in,Q) #Q = 1 x 1600
+        Z = np.transpose(np.vstack(z_recordings))
+        print("here Z, Q", np.shape(Z), np.shape(Q))
+        print(np.shape(np.linalg.inv(Z @ Z.T + beta_D * np.identity(self.M))))
+        D = (np.linalg.inv(Z @ Z.T + beta_D * np.identity(self.M)) @ Z @ Q.T).T
+        print(np.shape(D), np.shape(self.D))
+        return D
+
+
+    def compute_D_rige_3(self, z_recordings, p_recordings, beta_D):
+        y = np.zeros((len(p_recordings[0]),self.N ))
+        for pattern in p_recordings:
+            temp = []
+            for p_n in pattern:
+                temp.append(self.W_in * p_n)
+            print("temp, y", np.shape(temp), np.shape(y))
+            y += temp
+
+        X = np.zeros((len(z_recordings[0]), self.M))
+        for z_recording in z_recordings:
+            X += z_recording
+        print(np.shape(X))
+
+        ridge = Ridge(alpha=beta_D, fit_intercept=False)
+        ridge.fit(X, y)
+
+        D_optimized = ridge.coef_
+        print(D_optimized.shape)
+        return D_optimized
+
+    def compute_W_out_ridge_3(selfr_recordings, patterns, beta_W_out):
+        y = 0
+
+    def compute_W_out_ridge(self, r_recordings, patterns, beta_W_out):
+        # Collect the data in the form A = pattern_step and Z = r_recording
+        A_list = []
+        R_list = []
+        for pattern, r_recording in zip(patterns, r_recordings):
+            for pattern_step, r in zip(pattern, r_recording):
+                A_list.append(pattern_step)
+                R_list.append(np.atleast_1d(r))  # Ensure r is a 1D array
+
+        # Stack them into matrices
+        A = np.vstack(A_list)  # Shape (num_samples, N)
+        R = np.vstack(R_list)  # Shape (num_samples, M)
+
+        # Use Ridge regression solver from scikit-learn
+        ridge = Ridge(alpha=beta_W_out, fit_intercept=False)
+        ridge.fit(R, A)
+
+        # Reshape the result back to the shape of W
+        W_out_optimized = ridge.coef_  # Ridge gives the transpose, so we need to transpose it back
+        print(f"residuals W_out: {sum(A - ridge.predict(R))}")
+
+        return W_out_optimized
+
+
+    def __D_objective(self, D_flat, z_recordings, p_recordings, beta_D) -> float:
+
+        D = D_flat.reshape(self.N, self.M)  # Reshape the flattened D into matrix form
+        total_loss = 0
+        for p_recording, z_recording in zip(p_recordings, z_recordings):
+            for p_t, z_t in zip(p_recording, z_recording):
+                total_loss += np.linalg.norm(self.W_in * p_t - D @ z_t, 2)
+        # Add the regularization term
+        total_loss += beta_D ** 2 * np.linalg.norm(D, 2)
+        return total_loss
+
+    def optimize_D(self, z_recordings, p_recordings, beta_D):
+
+        res = minimize(self.__D_objective, x0=self.D.flatten(),
+                                      args=(z_recordings, p_recordings, beta_D))
+        return res.x.reshape(self.N, self.M)
