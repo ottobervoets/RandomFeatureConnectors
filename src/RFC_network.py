@@ -180,7 +180,7 @@ class RFCNetwork:
         ridge = Ridge(alpha=beta_D, fit_intercept=False)
         ridge.fit(X, y)
         D_test = ridge.coef_.T
-        return D_new
+        return D_test
 
     def print_NRMSEs(self, z_recordings, r_recordings, p_recordings, beta_G):
         D = 0
