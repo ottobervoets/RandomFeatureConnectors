@@ -1,11 +1,10 @@
 import numpy as np
 from sklearn.linear_model import Ridge
 from scipy.optimize import minimize
-import matplotlib.pyplot as plt
 
 class RFCNetwork:
     def __init__(self, N, M,spectral_radius = 1.4, lr_c=0.5, aperture=4, seed=294369130659753536483103517623731383366,
-                 F_method = "random", **kwargs):
+                 F_method="random", **kwargs):
         self.rng = np.random.default_rng(seed)
 
         self.N = N
@@ -23,15 +22,16 @@ class RFCNetwork:
         self.W_in = np.array(self.rng.normal(0, 1.2, self.N))
         self.W_out = np.array(self.rng.random(N))
 
+
         self.b = self.rng.normal(0, 0.2, N)
-        # self.D = self.rng.normal(0, 1, (self.N, self.M))  # random initialize D
-        self.D = self.rng.normal(0, 1, self.M)  # random initialize D
-        # Create a random matrix of size N x M
+        self.D = self.rng.normal(0, 1, (self.N, self.M))  # random initialize D
+
 
         # Create an empty list for conceptors
         self.c_list = []
         match F_method:
             case "random":
+
                 self.F = np.array(self.rng.normal(0, 1, (N, M)))
             case "white_noise":
                 self.construct_F_white_noise()
@@ -51,39 +51,36 @@ class RFCNetwork:
         self.F = a * self.F
         self.G = a * self.G
 
-        print(f"spectral radius of F' G = {np.max(np.abs(np.linalg.eigvals(np.transpose(self.F) @ self.G)))} ")
-
         self.z_initial = self.rng.normal(0, 0.5, self.M)
         self.z = self.z_initial.copy()
         self.r = self.G @ self.z_initial.copy()
 
+        print(f"spectral radius of F' G = {np.max(np.abs(np.linalg.eigvals(np.transpose(self.F) @ self.G)))} ")
 
     def construct_F_white_noise(self, sample_rate = 10, washout = 200):
-        pass
-        # white_noise_sequence = self.rng.uniform(-1,1, self.M * sample_rate + washout)
-        # map_F = []
-        # for idx in range(len(white_noise_sequence)):
-        #     self.r = self.G_tilde @ self.r + self.W_in * white_noise_sequence[idx]
-        #     if idx > washout and idx % sample_rate == 0:
-        #         map_F.append(self.r)
-        #
-        # self.F = np.array(map_F)
-        # print("map F:", np.shape(self.F))
+        white_noise_sequence = self.rng.uniform(-1,1, self.M * sample_rate + washout)
+        map_F = []
+        for idx in range(len(white_noise_sequence)):
+            self.r = self.G_tilde @ self.r + self.W_in * white_noise_sequence[idx]
+            if idx > washout and idx % sample_rate == 0:
+                map_F.append(self.r)
+
+        self.F = np.array(map_F)
+        print("map F:", np.shape(self.F))
 
 
-    def construct_F_patterns(self, patterns, washout = 200):
-        pass
-        # tot_len = sum(len(pattern) for pattern in patterns)
-        # frequency = tot_len - len(patterns) * washout
-        # map_F = []
-        # for pattern in patterns:
-        #     self.reset_r_z()
-        #     for idx in range(len(pattern)):
-        #         self.r = self.G_tilde @ self.r + self.W_in * p[idx]
-        #         if idx > washout and idx % sample_rate == 0:
-        #             map_F.append(self.r)
-        #
-        # self.F = np.array(map_F)
+    def construct_F_patterns(self, patterns, washout = 200): #todo: sample in advance
+        tot_len = sum(len(pattern) for pattern in patterns)
+        frequency = tot_len - len(patterns) * washout
+        map_F = []
+        for pattern in patterns:
+            self.r = self.rng.normal(0, 0.5, self.N)
+            for idx in range(len(pattern)):
+                self.r = self.G_tilde @ self.r + self.W_in * p[idx]
+                if idx > washout and idx % sample_rate == 0:
+                    map_F.append(self.r)
+
+        self.F = np.array(map_F)
 
     def __repr__(self):
         return f"RandomMatrixGenerator(N={self.N}, M={self.M}"
@@ -173,32 +170,24 @@ class RFCNetwork:
 
         Q = np.reshape(np.hstack(p_recordings), (1, len(p_recordings) * len(p_recordings[0])))
         Z = np.vstack(z_recordings).T
-        print(f"shape Z: {np.shape(Z)}, Q: {np.shape(Q)}")
         D_new = (np.linalg.inv(Z @ Z.T + beta_D * np.identity(self.M)) @ Z @ Q.T).T
         print(np.shape(D_optimized), np.shape(D_new))
-        ridge.fit(Z.T, Q.T)
-        print("difference D", np.linalg.norm(D_new - ridge.coef_, 2))
+        # print(np.linalg.norm(D_optimized - D_new.T, 2))
         return D_new
 
     def print_NRMSEs(self, z_recordings, r_recordings, p_recordings, beta_G):
         D = 0
         W_out = 0
-        D_one_dim = 0
         # print(np.shape(self.D), np.shape(self.z))
-        # print(f"Eigen values of D{np.mean(np.linalg.eigvals(self.D @ self.D.T))}")
+        print(f"Eigen values of D{np.mean(np.linalg.eigvals(self.D @ self.D.T))}")
         for z_recording, r_recording, p_recording in zip(z_recordings, r_recordings, p_recordings):
-            plt.plot(p_recording, label = "pattern")
-            plt.plot([self.D @ z_t for z_t in z_recording], label="recreated pattern")
-            plt.legend()
-            plt.show()
             for z_t, r_t, p_t in zip(z_recording, r_recording, p_recording):
                 D += np.linalg.norm(self.W_in * p_t - self.D @ z_t, 2)
-                D_one_dim += (p_t - self.D @ z_t) ** 2
                 W_out += (p_t - self.W_out @ r_t) ** 2
         num_z = len(z_recordings[0][0])*len(z_recordings[0])*len(z_recordings)
         num_p = len(p_recordings[0]) * len(p_recordings)
-        print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {beta_G * np.linalg.norm(self.G)}, D_one_dim {np.sqrt(D_one_dim)}")
-        print(f"D NRMSE {np.sqrt(D/num_z)}, W_out {np.sqrt(W_out/num_p)}, G = {beta_G * np.linalg.norm(self.G)} D_one_dim {np.sqrt(D_one_dim/num_p)}")
+        print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {beta_G * np.linalg.norm(self.G)}")
+        print(f"D NRMSE {np.sqrt(D/num_z)}, W_out {np.sqrt(W_out/num_p)}, G = {beta_G * np.linalg.norm(self.G)}")
 
     def compute_G(self, z_recordings, beta_G):
         print(np.shape(z_recordings))

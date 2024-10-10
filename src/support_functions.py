@@ -27,7 +27,7 @@ def compute_nrmse(true_series, predicted_series, phase_shift=0):
     p = np.array(aligned_predicted[0:min_len])
     y = aligned_true[0:min_len]
     nrmse = np.sqrt(np.mean((y-p)**2)/np.mean(p**2))
-    print(nrmse)
+    # print(nrmse)
     return nrmse
 
 

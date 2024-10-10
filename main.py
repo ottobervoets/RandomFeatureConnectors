@@ -86,24 +86,26 @@ def main_2():
                        beta_D = beta_D,
                        beta_W_out=beta_W_out,
                        beta_G = beta_G)
-
-    internal_T, result = rfc.hallucinating(800, 0, True, True)
-
-
-    internal = transpose_internal(internal_T)
-
-
-    plot_aligned_series_with_optimal_shift(patterns[0], result[200:], max_shift=40, segment_range=(0,600))
-
+    for i in range(len(patterns)):
+        _, result = rfc.hallucinating(800, i, False, True)
+        plt.plot(result, label = f"{i}")
+    plt.legend()
     plt.show()
-    plt.plot(internal[0], internal[1], "o")
-    plt.show()
+
+    # internal = transpose_internal(internal_T)
+
+
+    # plot_aligned_series_with_optimal_shift(patterns[1], result[200:], max_shift=40, segment_range=(0,600))
+    #
+    # plt.show()
+    # plt.plot(internal[0], internal[1], "o")
+    # plt.show()
     # plt.pause(3)
     # plt.close("all")
     # plt.imshow(rfc.D @ np.diag(rfc.c[1]) @ np.transpose(rfc.F))
     # plt.colorbar()
     # plt.show()
-    plot_internal(internal, range(0, 5), time=slice(0, 50))
+    # plot_internal(internal, range(0, 5), time=slice(0, 50))
     # for number in range(0,1001):
     #     plot_internal(internal, [number], 1)
 
@@ -116,3 +118,4 @@ def main():
 
 if __name__ == "__main__":
     main_2()
+    # test_basic_network()
