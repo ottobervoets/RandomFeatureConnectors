@@ -1,7 +1,6 @@
-print("hoi")
+import numpy as np
 
-class hoi_printer:
-    def __init__(self):
-        print("hoi")
 
-hoi = hoi_printer()
+l = np.array([1,2,3])
+
+print(l ** 2)

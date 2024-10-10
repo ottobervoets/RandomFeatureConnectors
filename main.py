@@ -1,9 +1,10 @@
 from src.basic_resevoir_network import *
 from src.signal_generators import *
-from src.RFC_network import *
+# from src.RFC_network import *
 from src.support_functions import *
-from src.RFC_network_2 import *
+from src.RFC_network import *
 import matplotlib.pyplot as plt
+# from src.RFC_network_old import *
 
 N = 100
 
@@ -69,7 +70,7 @@ def main_2():
     beta_G = 0.01
     beta_D = 0.01
     aperture = 8
-    spectral_radius = 1
+    spectral_radius = 1.4
 
     rfc = RFCNetwork(N=100, M=500, spectral_radius=spectral_radius, lr_c=learning_rate_c, aperture=aperture)
 
@@ -86,13 +87,24 @@ def main_2():
                        beta_D = beta_D,
                        beta_W_out=beta_W_out,
                        beta_G = beta_G)
+    for conceptor in rfc.c:
+        plt.plot(np.sort(conceptor))
+
+    plt.title("conceptors")
+    plt.show()
     for i in range(len(patterns)):
         _, result = rfc.hallucinating(800, i, False, True)
-        plt.plot(result, label = f"{i}")
+        plt.plot(result[100:200], label = f"{i}")
+    plt.title("recordings")
     plt.legend()
     plt.show()
 
-    # internal = transpose_internal(internal_T)
+
+    internal_T, _ = rfc.hallucinating(500, 0, True, False)
+    internal = transpose_internal(internal_T)
+    plt.plot(internal[0])
+    plt.title("Internal states")
+    plt.show()
 
 
     # plot_aligned_series_with_optimal_shift(patterns[1], result[200:], max_shift=40, segment_range=(0,600))

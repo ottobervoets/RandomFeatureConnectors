@@ -173,6 +173,9 @@ class RFCNetwork:
         D_new = (np.linalg.inv(Z @ Z.T + beta_D * np.identity(self.M)) @ Z @ Q.T).T
         print(np.shape(D_optimized), np.shape(D_new))
         # print(np.linalg.norm(D_optimized - D_new.T, 2))
+
+
+
         return D_new
 
     def print_NRMSEs(self, z_recordings, r_recordings, p_recordings, beta_G):

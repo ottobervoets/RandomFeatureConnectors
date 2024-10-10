@@ -4,7 +4,7 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 class RFCNetwork:
-    def __init__(self, N, M,spectral_radius = 1.4, lr_c=0.5, aperture=4, seed=294369130659753536483103517623731383366,
+    def __init__(self, N, M,spectral_radius = 1.4, lr_c=0.1, aperture=4, seed=294369130659753536483103517623731383366,
                  F_method = "random", **kwargs):
         self.rng = np.random.default_rng(seed)
 
@@ -29,7 +29,6 @@ class RFCNetwork:
         # Create a random matrix of size N x M
 
         # Create an empty list for conceptors
-        self.c_list = []
         match F_method:
             case "random":
                 self.F = np.array(self.rng.normal(0, 1, (N, M)))
@@ -43,8 +42,8 @@ class RFCNetwork:
             case _:
                 raise ValueError("Construction method not supported. Allowed methods: \"random\", \"white_noise\", \"patterns\"")
 
-        self.G = self.W @ self.F
-
+        # self.G = self.W @ self.F
+        self.G = self.rng.normal(0,1,(self.N, self.M))
         eigenvalues = np.linalg.eigvals(np.transpose(self.F) @ self.G)
         rho = np.max(np.abs(eigenvalues))
         a = np.power(spectral_radius / rho, 1 / 2)
@@ -89,11 +88,11 @@ class RFCNetwork:
         return f"RandomMatrixGenerator(N={self.N}, M={self.M}"
 
     def reset_r_z(self):
-        self.z = self.z_initial  # right??
+        self.z = self.z_initial.copy()  # right??
         self.r = self.G @ self.z
 
     def one_step_hallucinating(self, pattern_id=0):  # taken from page 113
-        # print(self.D @ self.z)
+
         self.r = np.tanh(self.G @ self.z + self.W_in * float(self.D @ self.z) + self.b)
         if self.number_of_patterns_stored == 0:
             self.z = np.identity(self.M) @ np.transpose(self.F) @ self.r
@@ -113,23 +112,20 @@ class RFCNetwork:
                 recording_y.append(float(self.W_out @ self.r))
         return recording_internal, recording_y
 
-    def load_pattern_in_c(self, pattern, n_adapt, washout):
+    def c_adaptation(self, pattern, n_adapt, washout): #todo check this
 
         self.c.append(np.ones(self.M))  # start at 1 conceptor
         # conceptor weight adaptation
         self.reset_r_z()
-
         for t in range(n_adapt):
-            self.z = np.diag(self.c[self.number_of_patterns_stored]) @ np.transpose(self.F) @ np.tanh(self.G @ self.z +
-                                                                                                 self.W_in *
-                                                                                                 np.atleast_1d(
-                                                                                                     pattern[t]) +
-                                                                                                 self.b)
+            self.z = np.diag(self.c[self.number_of_patterns_stored]) @ np.transpose(self.F) @ np.tanh(
+                 self.G @ self.z + self.W_in * pattern[t] + self.b)
             if t > washout:
                 self.c[self.number_of_patterns_stored] = self.c[self.number_of_patterns_stored] + self.lr_c * (
                         self.z ** 2 - np.multiply(self.c[self.number_of_patterns_stored], self.z ** 2) -
                         self.aperture ** -2 * self.c[self.number_of_patterns_stored]
                 )
+
 
     def record_r_z(self, n_washout: int, n_harvest: int, pattern: list[float]):
         record_r = []
@@ -178,6 +174,12 @@ class RFCNetwork:
         print(np.shape(D_optimized), np.shape(D_new))
         ridge.fit(Z.T, Q.T)
         print("difference D", np.linalg.norm(D_new - ridge.coef_, 2))
+
+        y = np.array(np.hstack(p_recordings[1:]))
+        X = np.vstack(z_recordings[:-1])
+        ridge = Ridge(alpha=beta_D, fit_intercept=False)
+        ridge.fit(X, y)
+        D_test = ridge.coef_.T
         return D_new
 
     def print_NRMSEs(self, z_recordings, r_recordings, p_recordings, beta_G):
@@ -187,18 +189,18 @@ class RFCNetwork:
         # print(np.shape(self.D), np.shape(self.z))
         # print(f"Eigen values of D{np.mean(np.linalg.eigvals(self.D @ self.D.T))}")
         for z_recording, r_recording, p_recording in zip(z_recordings, r_recordings, p_recordings):
-            plt.plot(p_recording, label = "pattern")
-            plt.plot([self.D @ z_t for z_t in z_recording], label="recreated pattern")
-            plt.legend()
-            plt.show()
+            # plt.plot(p_recording, label = "pattern")
+            # plt.plot([self.D @ z_t for z_t in z_recording], label="recreated pattern")
+            # plt.legend()
+            # plt.show()
             for z_t, r_t, p_t in zip(z_recording, r_recording, p_recording):
                 D += np.linalg.norm(self.W_in * p_t - self.D @ z_t, 2)
                 D_one_dim += (p_t - self.D @ z_t) ** 2
                 W_out += (p_t - self.W_out @ r_t) ** 2
         num_z = len(z_recordings[0][0])*len(z_recordings[0])*len(z_recordings)
         num_p = len(p_recordings[0]) * len(p_recordings)
-        print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {beta_G * np.linalg.norm(self.G)}, D_one_dim {np.sqrt(D_one_dim)}")
-        print(f"D NRMSE {np.sqrt(D/num_z)}, W_out {np.sqrt(W_out/num_p)}, G = {beta_G * np.linalg.norm(self.G)} D_one_dim {np.sqrt(D_one_dim/num_p)}")
+        print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {np.linalg.norm(self.G, 1)}, D_one_dim {np.sqrt(D_one_dim)}")
+        print(f"D NRMSE {np.sqrt(D/num_z)}, W_out {np.sqrt(W_out/num_p)}, G = {np.linalg.norm(self.G, 1)} D_one_dim {np.sqrt(D_one_dim/num_p)}")
 
     def compute_G(self, z_recordings, beta_G):
         print(np.shape(z_recordings))
@@ -224,7 +226,7 @@ class RFCNetwork:
         p_recordings = []
 
         for pattern in patterns:
-            self.load_pattern_in_c(pattern, n_adapt, washout)
+            self.c_adaptation(pattern, n_adapt, washout)
             record_r, record_z, record_p = self.record_r_z(pattern=pattern, n_harvest=n_harvest, n_washout=washout)
 
             z_recordings.append(record_z)
@@ -232,10 +234,9 @@ class RFCNetwork:
             p_recordings.append(record_p)
 
             self.number_of_patterns_stored += 1
-            self.c_list.append(np.ones(self.M))  # extend c
 
 
-        # self.print_NRMSEs(z_recordings, r_recordings, p_recordings, beta_G)
+        self.print_NRMSEs(z_recordings, r_recordings, p_recordings, beta_G)
 
         self.D = self.compute_D_rigde(z_recordings, p_recordings, beta_D)
         self.W_out = self.compute_W_out_ridge(r_recordings, p_recordings, beta_W_out)
