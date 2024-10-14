@@ -1,6 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from signal_generators import *
 
 
-l = np.array([1,2,3])
+res = rossler_attractor(1000)
 
-print(l ** 2)
+plt.plot(res[:,0], res[:,1])
+plt.show()

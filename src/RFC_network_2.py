@@ -6,8 +6,9 @@ from src.RFC_network import RFCNetwork
 
 class RFCNetwork2(RFCNetwork):
 
-    def __init__(self, N, M, spectral_radius=1.4, lr_c=0.5, aperture=4, seed=294369130659753536483103517623731383366):
-        super().__init__(N, M, spectral_radius=1.4, lr_c=0.5, aperture=4, seed=294369130659753536483103517623731383366)
+    def __init__(self, N, M, signal_dim=1, spectral_radius=1.4, lr_c=0.5, aperture=4, seed=294369130659753536483103517623731383366):
+        super().__init__(N, M, signal_dim=signal_dim, spectral_radius=spectral_radius,
+                         lr_c=lr_c, aperture=aperture, seed=seed)
 
     def one_step_hallucinating(self, pattern_id=0):  # taken from page 113
         # print(self.D @ self.z)
@@ -18,19 +19,10 @@ class RFCNetwork2(RFCNetwork):
             self.z = np.diag(self.c[pattern_id]) @ np.transpose(self.F) @ self.r
 
     def compute_D_rigde(self, z_recordings, p_recordings, beta_D, option=1):
-        Q = np.reshape(np.hstack(p_recordings), (1, len(p_recordings) * len(p_recordings[0])))
-
-        y = np.transpose(np.outer(self.W_in, Q))  # Q = 1 x 1600
-        # y = Q
+        p_stacked = np.hstack(p_recordings)
+        y = [self.W_in @ np.atleast_1d(p_t) for p_t in p_stacked]
         X = np.vstack(z_recordings)
         ridge = Ridge(alpha=beta_D, fit_intercept=False)
         ridge.fit(X, y)
         D_optimized = ridge.coef_
-        # return D_optimized
-
-        # Q = np.reshape(np.hstack(p_recordings), (1, len(p_recordings) * len(p_recordings[0])))
-        # Z = np.vstack(z_recordings).T
-        # D_new = (np.linalg.inv(Z @ Z.T + beta_D * np.identity(self.M)) @ Z @ y.T).T
-        # print(np.shape(D_optimized), np.shape(D_new))
-        # print(np.linalg.norm(D_optimized - D_new.T, 2))
         return D_optimized

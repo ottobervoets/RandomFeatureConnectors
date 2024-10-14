@@ -4,6 +4,7 @@ from src.signal_generators import *
 from src.support_functions import *
 from src.RFC_network import *
 import matplotlib.pyplot as plt
+from src.RFC_network_2 import *
 # from src.RFC_network_old import *
 
 N = 100
@@ -39,7 +40,13 @@ def analysis(patterns,
     n_harvest = 400
     washout = 200
 
-    rfc = RFCNetwork(N=100, M=500, spectral_radius=spectral_radius, lr_c=learning_rate_c, aperture=aperture)
+    try:
+        signal_dim = len(patterns[0][0])
+    except TypeError:
+        signal_dim = 1
+
+    rfc = RFCNetwork(N=100,
+                      M=500, signal_dim=signal_dim,spectral_radius=spectral_radius, lr_c=learning_rate_c, aperture=aperture)
 
     rfc.store_patterns(patterns=patterns,
                        n_adapt=n_adapt,
@@ -53,32 +60,64 @@ def analysis(patterns,
     optimal_shift = []
     for pattern_id in range(len(patterns)):
         _, result = rfc.hallucinating(700, pattern_id, False, True)
-        retrieved_patterns.append(result[:200])
-        shift, nmrse = find_optimal_phase_shift(patterns[pattern_id], result, 40)
+        shift, nmrse = find_optimal_phase_shift(patterns[pattern_id][0:20], result[200:], 400)
+        if nmrse>0.1:
+            plot_aligned_series_with_optimal_shift(patterns[pattern_id][0:20], result[200:], max_shift=480,
+                                                   segment_range=(0, 600))
         optimal_nrmse.append(nmrse)
         optimal_shift.append(shift)
 
     return optimal_shift, optimal_nrmse
 
 
+def main():
+    patterns = []
+    patterns.append(sinus_discrete(3000, 8.83))
+    patterns.append(sinus_discrete(3000, 9.83))
+
+    print(analysis(patterns))
+    patterns = []
+    patterns.append(rossler_attractor(3000))
+    print(analysis(patterns, aperture=1))
+
+
+
+
 def main_2():
-    n_adapt = 2000
     n_harvest = 400
-    washout = 200
+    washout = 500
     learning_rate_c = 0.5
-    beta_W_out = 1
-    beta_G = 0.01
+    beta_W_out = 0.01
+    beta_G = 1
     beta_D = 0.01
     aperture = 8
     spectral_radius = 1.4
-
-    rfc = RFCNetwork(N=100, M=500, spectral_radius=spectral_radius, lr_c=learning_rate_c, aperture=aperture)
+    N = 100
+    M = 500
+    W_mean = 0
+    W_std = 1
+    n_adapt = 2000
 
     patterns = []
-    patterns.append(sinus_discrete(3000,8.83))
     patterns.append(sinus_discrete(3000, 9.83))
-    patterns.append(random_pattern(3000,5))
+    patterns.append(sinus_discrete(3000,8.83))
     patterns.append(random_pattern(3000,4))
+    patterns.append(random_pattern(3000,5))
+
+
+    rfc = RFCNetwork(N=N,
+                     M=M,
+                     signal_dim=1,
+                     spectral_radius=spectral_radius,
+                     lr_c=learning_rate_c,
+                     aperture=aperture,
+                     d_dim="resevoir_dim",
+                     F_method="white_noise",
+                     G_method = "W_F",
+                     W_sr=1.5,
+                     W_sparseness=0.1,
+                     patterns=patterns)
+
 
     rfc.store_patterns(patterns=patterns,
                        n_adapt=n_adapt,
@@ -87,29 +126,21 @@ def main_2():
                        beta_D = beta_D,
                        beta_W_out=beta_W_out,
                        beta_G = beta_G)
+    i = 0
     for conceptor in rfc.c:
-        plt.plot(np.sort(conceptor))
-
-    plt.title("conceptors")
-    plt.show()
-    for i in range(len(patterns)):
-        _, result = rfc.hallucinating(800, i, False, True)
-        plt.plot(result[100:200], label = f"{i}")
-    plt.title("recordings")
+        plt.plot(np.sort(conceptor), label=f"{i}")
+        i += 1
     plt.legend()
     plt.show()
 
+    for i in range(len(patterns)):
+        _, result = rfc.hallucinating(800, i, False, True)
 
-    internal_T, _ = rfc.hallucinating(500, 0, True, False)
-    internal = transpose_internal(internal_T)
-    plt.plot(internal[0])
-    plt.title("Internal states")
-    plt.show()
+        plot_aligned_series_with_optimal_shift(patterns[i][0:20], result[400:], max_shift=299, segment_range=(0,600))
+        plt.show()
 
 
-    # plot_aligned_series_with_optimal_shift(patterns[1], result[200:], max_shift=40, segment_range=(0,600))
-    #
-    # plt.show()
+
     # plt.plot(internal[0], internal[1], "o")
     # plt.show()
     # plt.pause(3)
@@ -121,13 +152,21 @@ def main_2():
     # for number in range(0,1001):
     #     plot_internal(internal, [number], 1)
 
-def main():
-    settings = {}
-    apetures = []
-    spectral_radius = []
-
 
 
 if __name__ == "__main__":
     main_2()
-    # test_basic_network()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,47 +4,19 @@ from sklearn.metrics import mean_squared_error
 
 
 def compute_nrmse(true_series, predicted_series, phase_shift=0):
-    """
-    Compute the NRMSE between the true and predicted series after applying phase alignment.
-    Args:
-        true_series (list or np.array): The true time series data.
-        predicted_series (list or np.array): The predicted time series data.
-        phase_shift (int): Number of steps to shift the predicted series for alignment.
-
-    Returns:
-        float: NRMSE value between the aligned time series.
-    """
     # Shift the predicted series by phase_shift steps
-    if phase_shift > 0:
-        aligned_predicted = predicted_series[phase_shift:]
-        aligned_true = true_series[:len(aligned_predicted)]
-    else:
-        aligned_predicted = predicted_series[:len(predicted_series) + phase_shift]
-        aligned_true = true_series[-phase_shift:]
+    aligned_predicted = predicted_series[phase_shift:]
+    aligned_true = true_series
 
     # Compute NRMSE
     min_len = min(len(true_series), len(predicted_series))
     p = np.array(aligned_predicted[0:min_len])
     y = aligned_true[0:min_len]
     nrmse = np.sqrt(np.mean((y-p)**2)/np.mean(p**2))
-    # print(nrmse)
     return nrmse
 
 
 def find_optimal_phase_shift(true_series, predicted_series, max_shift):
-    """
-    Find the optimal phase shift that minimizes the NRMSE.
-
-    Args:
-        true_series (list or np.array): The true time series data.
-        predicted_series (list or np.array): The predicted time series data.
-        max_shift (int): Maximum phase shift to test.
-
-    Returns:
-        int: Optimal phase shift that minimizes NRMSE.
-        float: Corresponding NRMSE.
-    """
-
     best_nrmse = float('inf')
     best_shift = 0
 
@@ -54,6 +26,7 @@ def find_optimal_phase_shift(true_series, predicted_series, max_shift):
         if nrmse < best_nrmse:
             best_nrmse = nrmse
             best_shift = shift
+            # print(best_shift, best_nrmse)
 
     return best_shift, best_nrmse
 
@@ -75,19 +48,8 @@ def plot_aligned_series_with_optimal_shift(true_series, predicted_series, max_sh
     optimal_shift, best_nrmse = find_optimal_phase_shift(true_series, predicted_series, max_shift)
 
     # Apply the optimal phase shift for plotting
-    if optimal_shift > 0:
-        aligned_predicted = predicted_series[optimal_shift:]
-        aligned_true = true_series[:len(aligned_predicted)]
-    else:
-        aligned_predicted = predicted_series[:len(predicted_series) + optimal_shift]
-        aligned_true = true_series[-optimal_shift:]
-
-    # Limit to the specified segment range
-    if segment_range is not None:
-        start, end = segment_range
-        aligned_predicted = aligned_predicted[start:end]
-        aligned_true = aligned_true[start:end]
-
+    aligned_predicted = predicted_series[optimal_shift:optimal_shift+len(true_series)]
+    aligned_true = true_series
     # Plot the two time series
     plt.figure(figsize=(10, 6))
     plt.plot(aligned_true, label="True Series", color='b')
@@ -122,3 +84,33 @@ def plot_internal(internal_values, neurons, time, plot_time = None):
 
 def transpose_internal(recordings):
     return list(map(list, zip(*recordings)))
+
+
+import os
+from datetime import datetime
+import matplotlib.pyplot as plt
+
+
+def create_experiment_dir(save_string,
+                          figures,
+                          base_dir = "/res/experiments/"):
+    # Step 1: Create the directory with current date and time
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    experiment_dir = os.path.join(base_dir, current_time)
+
+    # Create the directory
+    os.makedirs(experiment_dir, exist_ok=True)
+
+    # Step 2: Write the provided string to a text file
+    file_path = os.path.join(experiment_dir, "experiment_info.txt")
+    with open(file_path, "w") as f:
+        f.write(save_string)
+
+    # Step 3: Save the figures in the directory
+    for i, fig in enumerate(figures):
+        figure_path = os.path.join(experiment_dir, f"figure_{i + 1}.png")
+        fig.savefig(figure_path)
+
+    print(f"Experiment directory created at: {experiment_dir}")
+
+
