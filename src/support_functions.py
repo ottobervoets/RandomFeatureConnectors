@@ -3,6 +3,26 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 
 
+
+def test_basic_network():
+    basic_network = BasicNetwork(100, non_zero=1)
+    sinus_signal = sinus_discrete(n=0, period=10)
+    print(sinus_signal)
+    recordings = basic_network.driving_pattern(sinus_signal, record=True)
+    recordings.extend(basic_network.hallucinate(200, record=True))
+    values_first = [timestep[0] for timestep in recordings]
+    print(values_first)
+    plot_recording(recordings, range(0, 5))
+
+
+def plot_recording(recording: list[list[float]], neurons_to_plot: list[int]):
+    for idx in neurons_to_plot:
+        # Extract the values corresponding to this index from each vector
+        values = [vec[idx] for vec in recording]
+        print(values)
+        plt.plot(values, label=f"Index {idx}")
+    plt.show()
+
 def compute_nrmse(true_series, predicted_series, phase_shift=0):
     # Shift the predicted series by phase_shift steps
     aligned_predicted = predicted_series[phase_shift:]
@@ -113,4 +133,12 @@ def create_experiment_dir(save_string,
 
     print(f"Experiment directory created at: {experiment_dir}")
 
+def NRMSE_2_dim(y_true, y_predicted):
+    y_true = np.array(y_true)
+    y_predicted = np.array(y_predicted)
+    if y_true.shape != y_predicted.shape:
+        raise ValueError("Shapes not equal")
 
+    mse = np.mean((y_true - y_predicted) ** 2)
+    nrmse = np.sqrt(mse)/len(y_true)
+    return nrmse

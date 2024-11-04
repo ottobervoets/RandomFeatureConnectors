@@ -1,0 +1,138 @@
+Aanbestedingsfunctie;Het ondersteunen van de uitvoering van aanbestedingen;Aanbestedingssysteem
+Activagegevensbeheer;Het beheren van gegevens over activa;Financieel systeem
+Analytics-to-the-datafunctie;Het uitvoeren van een analyse op de locatie van de data. Het analyseresultaat wordt teruggezonden zonder dat directe toegang tot de geanalyseerde data nodig is.;Research Data Platform
+Architectuurbeheerfunctie;Het ondersteunen van het beheren van de enterprise-architectuur;Architectuurbeheersysteem
+Architectuurmodelleringsfunctie;Het ondersteunen van het modelleren van de enterprise-architectuur;Architectuurbeheersysteem
+Archiveringsfunctie;Het ondersteunen van het archiveren van documenten en records;Document management systeem
+Auteurgegevensbeheer;Het beheren van gegevens over auteurs van werken;Auteuridentificatiesysteem
+Auteuridentificatiefunctie;Het ondersteunen van de identificatie van auteurs van werken;Auteuridentificatiesysteem
+Autorisatiegegevensbeheer;Het beheren van gegevens over autorisaties;Identity- en accessmanagementsysteem
+BPM-functie;Het ondersteunen van de uitvoering van (bedrijfs)processen;BPM systeem
+Basisgegevensbeheer hoger onderwijs;Het beheren van gegevens over deelnemers van hoger onderwijsinstellingen;Basisregistratie hoger onderwijs
+Begrotingsgegevensbeheer;Het beheren van gegevens over begrotingen;Financieel systeem
+Betaalfunctie;Het ontvangen van fysieke betalingen;Betaalsysteem
+Betalingsgegevensbeheer;Het beheren van gegevens over betalingen;Financieel systeem
+Bibliotheekgegevensbeheer;Het beheren van gegevens over collecties van materialen en uitleningen daarvan;Bibliotheeksysteem
+Budgetgegevensbeheer;Het beheren van gegevens over budgetten;Personeelssysteem
+Campagnegegevensbeheer;Het beheren van gegevens over campagnes;CRM systeem
+Catalogusfunctie;Het ontsluiten van informatie over de beschikbare onderzoeksgegevenssets.;Research Data Platform
+Clinical Trial Management-functie;Het beheren van gegevens over klinische onderzoeken.;Clinical Trial Management Systeem
+Communicatiefunctie;Het ondersteunen van het communiceren tussen mensen via verschillende kanalen;Unified Communications systeem
+Compliancybewakingsfunctie;Het ondersteunen van processen om compliant te kunnen zijn aan wettelijke vereisten;Gezondheid Veiligheid en Duurzaamheid systeem
+Compute & Data Staging;Ruimte binnen de VRE om gebruik te maken van verschillende compute solutions en waar nodig eenvoudig te configureren datastaging om kosteneffectief te bufferen voor grootschalige berekeningen.;Virtual Research Environment
+Computefunctie;Het uitvoeren van (grootschalige, high-performance) rekenkundige operaties.;Compute solution
+Contactengegevensbeheer;Het beheren van gegevens over contactmomenten;CRM systeem
+Contractbeheerfunctie;Het ondersteunen van het beheren van contracten;Inkoopsysteem
+Corporate LMS-functie;Het ondersteunen van alle inhoudelijke, logistieke en administratieve processen rondom het aanbieden van leerinterventies aan medewerkers;Corporate LMS
+Crediteurgegevensbeheer;Het beheren van gegevens over crediteuren;Financieel systeem
+Data Cleansing Zone;Het gebied voor gecontroleerd detecteren en corrigeren (of verwijderen) van corrupte of onnauwkeurige records uit een recordset, tabel of database. Vooral gebruikt in databases verwijst de term naar het identificeren van onvolledige, onjuiste, onnauwkeurige, irrelevante, enz. delen van de gegevens en het vervolgens vervangen, wijzigen of verwijderen van deze 'vuile' gegevens. Het gecontroleerde vermogen om de datamodificatie van gegevens(sets) bij te houden, is noodzakelijk voor data-trailing / -audits, het voldoen aan voorwaarden van bepaalde subsidies en is de sleutel voor monitoren. De licentieovereenkomst kan vereisen dat passende correcties worden voorgesteld / gemaakt om de brongegevens te corrigeren / verbeteren.;Virtual Research Environment
+Data Landing Zone;Een plaats waar de gegevenseigenaar gegevens plaatst en waar de gegevens niet kunnen worden gewijzigd. De landingszone bestaat uit twee delen. Een logboek van wie wanneer welke data heeft aangeboden en de gegevens plus de licentieovereenkomst. De voorwaarden van de licentieovereenkomst worden overgenomen van de bron en zijn een directe afgeleide van de governance die wordt geboden door de onderzoeksvraag.;Virtual Research Environment
+Data Sharing Zone;"Een plek waar de gebruiker van de VRE gegevens kan delen; dit omvat archivering van de studie. De gegevens in de Data Sharing Zone kunnen niet worden gewijzigd, maar alleen worden verwijderd door een gebruiker van de werkruimte. De zone voor het delen van gegevens bestaat uit drie delen: meta, log en gegevens en voorwaarden. Het verschil met een data-landingzone, is wie de controle heeft over de gegevens: data-landingzone = leverancier / eigenaar van de data; zone voor gegevensuitwisseling = werkruimtegebruiker.";Virtual Research Environment
+Data cleansing-functie;Het onderesteunen van het detecteren en corrigeren of verwijderen van invalide gegevens.;Data cleansing tool
+Data ingestionfunctie;Het inladen van gegevens van een andere bron conform de afgesproken voorwaarden van de bijbehorende licentieovereenkomst.;Data ingestion tool
+Datadiscoveryfunctie;Het ondersteunen van het ontdekken van gegevens in een dataset.;"Research Data Platform
+Virtual Research Environment"
+Datastagingfunctie;Het klaarzetten van grote datasets ten behoeve van het uitvoeren van rekenkundige operaties.;Compute solution
+Datatransferfunctie;Het - op een veilige manier - overdragen van onderzoeksgegevens, zo nodig gepseudonimiseerd en/of via een Trusted Third Party.;"Onderzoeksgegevensbeheersysteem
+Research Data Platform"
+Debiteurgegevensbeheer;Het beheren van gegevens over debiteuren;Financieel systeem
+Declaratieverwerkingsfunctie;Het ondersteunen van het uitbetalen van declaraties aan medewerkers;Salarisverwerkingssysteem
+Digitaalportfoliofunctie;Het ondersteunen van het verzamelen van eigen werk;Digitaal portfoliosysteem
+Documentbewerkingsfunctie;Het ondersteunen van het maken en bewerken van documenten, presentaties, spreadsheets, etc.;Officesuite
+Documentconversiefunctie;Het converteren van documenten;Inputmanagementsysteem
+Documentgeneratiefunctie;Het genereren van documenten op basis van specifieke invoer;Enterprise outputmanagementsysteem
+Documentherkenningsfunctie;Het herkennen van documenten;Inputmanagementsysteem
+Documentindexatiefunctie;Het indexeren van documenten;Inputmanagementsysteem
+Documentmanagementfunctie;Het ondersteunen van het maken en beheren van documenten en records;Document management systeem
+Documentscanningfunctie;Het scannen van documenten;Inputmanagementsysteem
+E-mailfunctie;Het ondersteunen van het uitwisselen van e-mails tussen gebruikers;E-mail systeem
+Enqueteafnamefunctie;Het ondersteunen van de afname van enquetes;Enquetesysteem
+Evenementgegevensbeheer;;Evenementensysteem
+Faciliteitenbeheerfunctie;Het ondersteunen van het beheer van faciliteiten;Facilitair systeem
+Factuurgegevensbeheer;Het beheren van gegevens over facturen;Financieel systeem
+Formatieplaatsgegevensbeheer;Het beheren van gegevens over formatieplaatsen;Personeelssysteem
+Formuliergenereerfunctie;Het maken van elektronnische formulieren;Formulierengenerator
+Gebouwbeheerfunctie;Het ondersteunen van het beheer van gebouwen;Facilitair systeem
+Gegevensanalysefunctie;Het ondersteunen van de analyse van gegevens;Gegevensanalysesysteem
+Gegevensvisualisatiefunctie;Het ondersteunen van de visualisatie van gegevens;Gegevensvisualisatiesysteem
+Goederenstroombeheerfunctie;Het ondersteunen van het beheer van goederenstromen;Facilitair systeem
+Grootboekgegevensbeheer;Het beheren van gegevens over grootboekrekeningen;Financieel systeem
+IT-Systeembeheerfunctie;Het ondersteunen van het beheer van IT systemen;IT management systeem
+Identiteitgegevensbeheer;Het beheren van gegevens over identiteiten;Identity- en accessmanagementsysteem
+Indexatiefunctie;Het indexeren van interne en externe wetenschappelijke content ten behoeve van doorzoekbaarheid.;Wetenschappelijke zoekmachine
+Informatiebeveiligingsfunctie;Het ondersteunen van informatiebeveiliging;IT management systeem
+Informatievindfunctie;Het ondersteunen bij het vinden van de juiste informatie;Online kennisbank
+Informed Consent gegevensbeheer;Het beheren van gegevens over 'informed consent'/;Informed Consent registratiesysteem
+Inzetgegevensbeheer;Het beheren van gegevens over medewerkerinzet;Inzetplanningssysteem
+Inzetplanningsfunctie;Het matchen van beschikbare medewerkerinzet met benodigde medewerkerinzet;Inzetplanningssysteem
+Kaartbeheerfunctie;Het ondersteunen van het beheer van fysieke kaarten, inclusief de daarop beschikbare gegevens voor bijvoorbeeld toegang tot gebouwen en ruimtes.;Kaartbeheersysteem
+Kwaliteitsmanagementfunctie;Het ondersteunen van kwaliteitsmanagement;Kwaliteitsmanagementsysteem
+Learning content managementfunctie;Het ondersteunen van het beheren van onderwijsmateriaal;Learning content management systeem
+Learning managementfunctie;Het ondersteunen van studenten bij het leren en het interacteren met medestudenten en docenten over het onderwijs;Learning management systeem
+Leermateriaalontsluiting;Het zichtbaar maken van specifieke leerinhoud voor de deelnemer;Educatieve applicatie
+Leveranciersbeheerfunctie;Het ondersteunen van het beheren van leveranciers;Inkoopsysteem
+Loggingfunctie;Het vastleggen wie welke handelingen met welke gegevens uitvoert.;"Data ingestion tool
+Onderzoeksgegevensbeheersysteem"
+Medewerkerbeoordelingsgegevensbeheer;Het beheren van gegevens over medewerkerbeoordelingen;Personeelssysteem
+Medewerkergegevensbeheer;Het beheren van gegevens over medewerkers;Personeelssysteem
+Metadatabeheerfunctie;Het beheren van metadata van onderzoeksgegevens.;Onderzoeksgegevensbeheersysteem
+Narrowcastingfunctie;Het ondersteunen van het publiceren van informatie via audiovisuele displays naar specifieke doelgroepen;Narrowcastingsysteem
+Objectidentificatiefunctie;Het ondersteunen van de toewijzing en het beheer van identificaties van objecten;Objectidentificatiesysteem
+Onderwijsaanbodgegevensbeheer;Het beheren van gegevens over het onderwijsaanbod;Studentinformatiesysteem
+Onderwijsplanningsfunctie;Het ondersteunen van het koppelen van onderwijsaanbod aan deelnemers;Studentinformatiesysteem
+Onderzoekgegevensversioneringfunctie;Het bewaren van versies van (delen van) onderzoeksgegevenssets en bijbehorende metadata.;Onderzoeksgegevensbeheersysteem
+Onderzoeksdatagovernancefunctie;Het beheren en afdwingen van licentievoorwaarden van onderzoeksgegevens.;Onderzoeksgegevensbeheersysteem
+Onderzoeksdisseminatiebeheer;Het ondersteunen van het dissemineren van resultaten van een onderzoek;Onderzoeksdisseminatierepository
+Onderzoeksfinancieringfunctie;Het ondersteunen van de financiering van onderzoeken;Onderzoekssubsidieaanvraagsysteem
+Onderzoeksgegevensarchiveringsfunctie;Het ondersteunen van het archiveren van onderzoeksgegevens;Onderzoeksgegevensarchief
+Onderzoeksgegevensbeheerfunctie;Het beheren van onderzoeksgegevens tijdens de uitvoering van het onderzoek;Onderzoeksgegevensbeheersysteem
+Onderzoeksgegevenscreatiefunctie;Het ondersteunen van het creëren van onderzoeksgegevens;Onderzoeksmeetsysteem
+Onderzoeksgegevenspreservatiefunctie;Het ondersteunen van het preserveren van onderzoeksgegevens.;Onderzoeksgegevensarchief
+Onderzoeksgegevensverzamelfunctie;Het ondersteunen van het verzamelen van onderzoeksgegevens;
+Onderzoeksmanagementfunctie;Het ondersteunen van het managen van een onderzoek.;Onderzoeksinformatiesysteem
+Onderzoeksobjectverwervingsfunctie;Het ondersteunen van het verwerven van objecten van onderzoek;
+Onderzoeksplanningsfunctie;Het ondersteunen van het plannen van een onderzoek.;Onderzoeksinformatiesysteem
+Onderzoeksregistratiefunctie;Het ondersteunen van het registreren van gegevens over onderzoeken;Onderzoeksinformatiesysteem
+Onderzoeksvergunningsverwervingsfunctie;Het ondersteunens van het verwerven van vergunningen voor onderzoek;Onderzoeksinformatiesysteem
+Plagiaatdetectiefunctie;Het ondersteunen van het detecteren van plagiaat;Plagiaatdetectiesysteem
+Portaalfunctie;Het bieden van een persoonlijke omgeving aan gebruikers;"Portaal
+Research Data Platform
+Virtual Research Environment"
+Portfoliomanagementfunctie;Het ondersteunen van het bepalen en sturen van portfolio's van assets en veranderingen;Project Programma en Portfoliomanagement systeem
+Preserveringsfunctie;Het ondersteunen van het langdurig preserveren van gegevens;E-Depot
+Procurementfunctie;Het ondersteunen van het beheren van productinkopen;Inkoopsysteem
+Programmamanagementfunctie;Het ondersteunen van het bepalen en sturen van programma's;Project Programma en Portfoliomanagement systeem
+Projectmanagementfunctie;Het ondersteunen van het bepalen en sturen van projecten;Project Programma en Portfoliomanagement systeem
+Promotievolgfunctie;Het ondersteunen van het volgen van de voortgang van promoties;Promotievolgysteem
+Rapportagefunctie;Het bieden van een integraal en historisch beeld van gegevens;Managementinformatiesysteem
+Relatiegegevensbeheer;Het beheren van gegevens over relaties;CRM systeem
+Research Playground;Het deel van de VRE waar het analytische en data-crunchende deel van het onderzoek plaatsvindt.;Virtual Research Environment
+Roosterconstructiefunctie;Het ondersteunen van het maken van roosters op basis van de beschikbaarheid van middelen;Roostersysteem
+Roosterpublicatiefunctie;Het beheren, waaronder publiceren, van roostergegevens;Roostersysteem
+Roosterwijzigingsfunctie;Het beheren en communiceren van roosterwijzigingen;Roostersysteem
+Salarisverwerkingsfunctie;Het ondersteunen van het uitbetalen van salarissen aan medewerkers;Salarisverwerkingssysteem
+Samenwerkingsfunctie;Het ondersteunen van het creëren en delen van gezamenlijke kennis;Samenwerkingssysteem
+Servicemanagementfunctie;Het ondersteunen van de interne dienstverlening (servicemanagement);Servicemanagementsysteem
+Software-ontwerpfunctie;Het ondersteunen van het ontwerpen van software;Software-ontwikkelomgeving
+Softwarebeheerfunctie;Het ondersteunen van het beheren van software;Software-ontwikkelomgeving
+Softwaredeploymentfunctie;Het ondersteunen van het deployen van software;Software-ontwikkelomgeving
+Softwarerealisatiefunctie;Het ondersteunen van het realiseren van software;Software-ontwikkelomgeving
+Sollicitatiegegevensbeheer;Het beheren van gegevens over sollicitaties;Personeelssysteem
+Stageplaatsmatchingfunctie;Het ondersteunen van het matchen van vraag en aanbod van stageplaatsen en van afstudeertrajecten;Stagesysteem
+Stagetrajectgegevensbeheer;Het beheren van gegevens over stage- en afstudeertrajecten en de voortgang daarvan;Stagesysteem
+Studieinschrijffunctie;Het ondersteunen van het aanmelden, inschrijven en uitschrijven van deelnemers voor deelname aan (delen van) het onderwijsaanbod;Studentinformatiesysteem
+Studievolgfunctie;Het ondersteunen van het volgen en begeleiden van deelnemers;Studentinformatiesysteem
+Tijdregistratiefunctie;Het beheren van gegevens over de besteding van tijd van individuen;Tijdregistratiesysteem
+Toetsbeoordelingsfunctie;Het ondersteunen van het beoordelen van gemaakte toetsen;Digitaal toetssysteem
+Toetsuitvoeringsfunctie;Het ondersteunen van het toetsen van deelnemers;Digitaal toetssysteem
+Toetsvoorbereidingsfunctie;Het ondersteunen van het voorbereiden van toetsactiviteiten;Digitaal toetssysteem
+Vacaturegegevensbeheer;Het beheren van gegevens over vacatures;Personeelssysteem
+Vault;Biedt de mogelijkheid om versies van gegevensworkflows, algoritmen en indien nodig (subsets van) gegevens op te slaan.;Virtual Research Environment
+Verlofgegevensbeheer;Het beheren van gegevens over verlof;Personeelssysteem
+Vermogensgegevensbeheer;Het beheren van gegevens over vermogen;Financieel systeem
+Videomanagementfunctie;Het ondersteunen van het opnemen, beheren en publiceren van video's;Videomanagementsysteem
+Videostreamingfunctie;Het ondersteunen van het streamen van hoge kwaliteit video;Videostreamingsysteem
+Webcontentmanagementfunctie;Het ondersteunen van het beheren en publiceren van web content;Web content management systeem
+Wetenschappelijke zoekfunctie;Het ondersteunen van het doorzoeken van alle interne en externe wetenschappelijke content;Wetenschappelijke zoekmachine
+Ziektegegevensbeheer;Het beheren van gegevens over ziekte;Personeelssysteem
+Zoekfunctie;Het zoeken naar gegevens in een afgebakend informatiedomein.;Zoekmachine

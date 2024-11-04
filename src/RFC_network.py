@@ -1,6 +1,5 @@
 import numpy as np
 from sklearn.linear_model import Ridge
-from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 class RFCNetwork:
@@ -8,7 +7,7 @@ class RFCNetwork:
                  N,
                  M,
                  signal_dim=1,
-                 spectral_radius = 1.4,
+                 spectral_radius=1.4,
                  lr_c=0.1,
                  aperture=4,
                  W_in_mean=0,
@@ -20,12 +19,16 @@ class RFCNetwork:
                  d_dim="sig_dim",
                  F_method="random",
                  G_method="random",
-
+                 reproducible=False,
                  seed=294369130659753536483103517623731383366,
+                 verbose = False,
                  **kwargs):
 
-        self.rng = np.random.default_rng(seed)
-
+        if reproducible:
+            self.rng = np.random.default_rng(seed)
+        else:
+            self.rng = np.random.default_rng()
+        self.verbose = verbose
         self.N = N
         self.M = M
         self.signal_dim = signal_dim
@@ -47,14 +50,13 @@ class RFCNetwork:
         self.create_F(F_method, G_method, kwargs)
         self.create_G(G_method)
 
-
         eigenvalues = np.linalg.eigvals(np.transpose(self.F) @ self.G)
         rho = np.max(np.abs(eigenvalues))
         a = np.power(spectral_radius / rho, 1 / 2)
         self.F = a * self.F
         self.G = a * self.G
-
-        print(f"spectral radius of F' G = {np.max(np.abs(np.linalg.eigvals(np.transpose(self.F) @ self.G)))} ")
+        if self.verbose:
+            print(f"spectral radius of F' G = {np.max(np.abs(np.linalg.eigvals(np.transpose(self.F) @ self.G)))} ")
 
         self.z_initial = self.rng.normal(0, 0.5, self.M)
         self.z = self.z_initial.copy()
@@ -73,8 +75,8 @@ class RFCNetwork:
             case _:
                 raise ValueError(f"{G_method} is not a supported way to create G. The methods are: W_G_tilde, " +
                                  f"W_F and random.")
-    #todo implement W and various ways to generate F. Also, make sure that if F is generated, G is not random.
-    def create_W(self, sparseness = 0.1, W_spectral_radius=None):
+
+    def create_W(self, sparseness=0.1, W_spectral_radius=None):
         total_elements = self.N ** 2
         num_non_zero = int(total_elements * sparseness)
 
@@ -88,8 +90,9 @@ class RFCNetwork:
         if W_spectral_radius is None:
             self.W = W_sparse
         else:
-            self.W = W_sparse * (W_spectral_radius/rho)
-        print("spectral radius of W:",np.max(np.abs(np.linalg.eigvals(self.W))) )
+            self.W = W_sparse * (W_spectral_radius / rho)
+        if self.verbose:
+            print("spectral radius of W:", np.max(np.abs(np.linalg.eigvals(self.W))))
 
     def create_F(self, F_method, G_method, kwargs):
         match F_method:
@@ -106,18 +109,20 @@ class RFCNetwork:
                 raise ValueError(
                     "Construction method not supported. Allowed methods: \"random\", \"white_noise\", \"patterns\"")
         if F_method != "random" and G_method == "random":
-            raise Warning("Making a non-random F matrix with a random G does not make sense. Performance is unpredicted")
-        assert(np.isnan(self.F).any or np.isinf(self.F).any)
+            raise Warning(
+                "Making a non-random F matrix with a random G does not make sense. Performance is unpredicted")
+        assert (np.isnan(self.F).any or np.isinf(self.F).any)
+
     def create_D(self):
         match self.d_dim:
             case "sig_dim":
                 self.D = self.rng.normal(0, self.signal_dim, self.M)  # random initialize D
-            case "resevoir_dim":
+            case "reservoir_dim":
                 self.D = self.rng.normal(0, 1, self.M)  # random initialize D
             case _:
-                raise ValueError("D can either map back to the \"sig_dim\" or the \"resevoir_dim\" ")
+                raise ValueError("D can either map back to the \"sig_dim\" or the \"reservoir_dim\" ")
 
-    def construct_F_white_noise(self, sample_rate = 50, washout = 500):
+    def construct_F_white_noise(self, sample_rate=50, washout=500):
         white_noise_sequence = self.rng.uniform(-1, 1, (self.M * sample_rate + washout, self.signal_dim))
         map_F = []
         self.r = self.rng.normal(0, 0.5, self.N)
@@ -126,19 +131,17 @@ class RFCNetwork:
             if idx >= washout and idx % sample_rate == 0:
                 map_F.append(self.r)
         self.F = np.array(map_F).T
-        print("map F:", np.shape(self.F))
+        if self.verbose:
+            print("map F:", np.shape(self.F))
 
-
-    def construct_F_patterns(self, patterns, washout = 200):
+    def construct_F_patterns(self, patterns, washout=200):
         no_patterns = len(patterns)
         pattern_lens = [len(pattern) for pattern in patterns]
-        sample_rates = [np.ceil((pattern_len-washout)/(self.M/no_patterns)) for pattern_len in pattern_lens]
+        sample_rates = [np.ceil((pattern_len - washout) / (self.M / no_patterns)) for pattern_len in pattern_lens]
         if any([sample_rate < 3 for sample_rate in sample_rates]):
-            small_sample_rates = np.where(np.array(sample_rates)<3)
+            small_sample_rates = np.where(np.array(sample_rates) < 3)
             raise Warning(f"Sample rate of patterns{small_sample_rates} are below 3, give a longer sequence")
 
-        tot_len = sum(len(pattern) for pattern in patterns)
-        frequency = tot_len - len(patterns) * washout
         map_F = []
         for pattern, sample_rate in zip(patterns, sample_rates):
             self.r = self.rng.normal(0, 1, self.N)
@@ -146,10 +149,10 @@ class RFCNetwork:
                 self.r = np.tanh(self.W @ self.r + self.W_in @ np.atleast_1d(pattern[idx]))
                 if idx > washout and idx % sample_rate == 0:
                     map_F.append(self.r)
-        print(np.shape(map_F))
-        while len(map_F) < 500:
-            map_F.append(self.rng.normal(0,1,self.N))
-            print("Appended random vector to map F")
+        while len(map_F) < self.M:
+            map_F.append(self.rng.normal(0, 1, self.N))
+            if self.verbose:
+                print("Appended random vector to map F")
         self.F = np.array(map_F).T
 
     def __repr__(self):
@@ -163,7 +166,7 @@ class RFCNetwork:
         match self.d_dim:
             case "sig_dim":
                 self.r = np.tanh(self.G @ self.z + self.W_in @ np.atleast_1d(self.D @ self.z) + self.b)
-            case "resevoir_dim":
+            case "reservoir_dim":
                 self.r = np.tanh(self.G @ self.z + self.D @ self.z + self.b)
             case _:
                 raise ValueError("Something wrong with d_dim")
@@ -173,9 +176,9 @@ class RFCNetwork:
         else:
             self.z = np.diag(self.c[pattern_id]) @ np.transpose(self.F) @ self.r
 
-
-    def hallucinating(self, time, pattern_id=0, record_internal=False, record_y=False):
-        self.reset_r_z()
+    def hallucinating(self, time, pattern_id=0, record_internal=False, record_y=False, reset_resevoir = True):
+        if reset_resevoir:
+            self.reset_r_z()
         recording_internal = []
         recording_y = []
         for t in range(time):
@@ -193,13 +196,12 @@ class RFCNetwork:
         self.reset_r_z()
         for t in range(n_adapt):
             self.z = np.diag(self.c[self.number_of_patterns_stored]) @ np.transpose(self.F) @ np.tanh(
-                 self.G @ self.z + self.W_in @ np.atleast_1d(pattern[t]) + self.b)
+                self.G @ self.z + self.W_in @ np.atleast_1d(pattern[t]) + self.b)
             if t > washout:
                 self.c[self.number_of_patterns_stored] = self.c[self.number_of_patterns_stored] + self.lr_c * (
                         self.z ** 2 - np.multiply(self.c[self.number_of_patterns_stored], self.z ** 2) -
                         self.aperture ** -2 * self.c[self.number_of_patterns_stored]
                 )
-
 
     def record_r_z(self, n_washout: int, n_harvest: int, pattern: list[float]):
         record_r = []
@@ -227,11 +229,9 @@ class RFCNetwork:
         ridge.fit(X, y)
 
         W_out_optimized = ridge.coef_
-        print("w_out", np.shape(self.W_out), np.shape(W_out_optimized))
         return W_out_optimized
 
     def compute_D_rigde(self, z_recordings, p_recordings, beta_D):
-        D_optimized = None
         match self.d_dim:
             case "sig_dim":
                 y = np.array(np.hstack(p_recordings))
@@ -239,7 +239,7 @@ class RFCNetwork:
                 ridge = Ridge(alpha=beta_D, fit_intercept=False)
                 ridge.fit(X, y)
                 D_optimized = ridge.coef_.T
-            case "resevoir_dim":
+            case "reservoir_dim":
                 p_stacked = np.hstack(p_recordings)
                 y = [self.W_in @ np.atleast_1d(p_t) for p_t in p_stacked]
                 X = np.vstack(z_recordings)
@@ -248,20 +248,22 @@ class RFCNetwork:
                 D_optimized = ridge.coef_
             case _:
                 raise ValueError("Something went wrong with d_dim when computing D")
-        print("D_optimized", np.shape(D_optimized))
+        if self.verbose:
+            print("D_optimized", np.shape(D_optimized))
         return D_optimized
 
-    def print_NRMSEs(self, z_recordings, r_recordings, p_recordings, beta_G):
+    def print_NRMSEs(self, z_recordings, r_recordings, p_recordings):
         D = 0
         W_out = 0
         for z_recording, r_recording, p_recording in zip(z_recordings, r_recordings, p_recordings):
             for z_t, r_t, p_t in zip(z_recording, r_recording, p_recording):
                 D += np.linalg.norm(self.W_in @ np.atleast_1d(p_t) - self.D @ z_t, 2)
                 W_out += np.mean((p_t - self.W_out @ r_t) ** 2)
-        num_z = len(z_recordings[0][0])*len(z_recordings[0])*len(z_recordings)
+        num_z = len(z_recordings[0][0]) * len(z_recordings[0]) * len(z_recordings)
         num_p = len(p_recordings[0]) * len(p_recordings)
-        print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {np.linalg.norm(self.G, 2)}")
-        print(f"D NRMSE {np.sqrt(D/num_z)}, W_out {np.sqrt(W_out/num_p)}, G = {np.linalg.norm(self.G, 2)}")
+        if self.verbose:
+            print(f"D RMSE {np.sqrt(D)}, W_out {np.sqrt(W_out)}, G = {np.linalg.norm(self.G, 2)}")
+            print(f"D NRMSE {np.sqrt(D / num_z)}, W_out {np.sqrt(W_out / num_p)}, G = {np.linalg.norm(self.G, 2)}")
 
     def compute_G(self, z_recordings, beta_G):
         y = [self.G @ np.transpose(z_recoding) for z_recoding in z_recordings]
@@ -270,9 +272,10 @@ class RFCNetwork:
         ridge = Ridge(alpha=beta_G, fit_intercept=False)
         ridge.fit(X, y)
         G_optimized = ridge.coef_
-        print(f"Mean absolute size of G {np.linalg.norm
-        (G_optimized):.2f} which was {np.linalg.norm(self.G):.2f}, so a decrease"
-              f" of {(np.linalg.norm(self.G) - np.linalg.norm(G_optimized))/ np.linalg.norm(self.G):.2f}")
+        if self.verbose:
+            print(f"Mean absolute size of G {np.linalg.norm
+            (G_optimized):.2f} which was {np.linalg.norm(self.G):.2f}, so a decrease"
+                  f" of {(np.linalg.norm(self.G) - np.linalg.norm(G_optimized)) / np.linalg.norm(self.G):.2f}")
         return G_optimized
 
     def auto_adapt(self, n_auto_adapt, washout=200):
@@ -285,7 +288,13 @@ class RFCNetwork:
                             self.z ** 2 - np.multiply(self.c[c_idx], self.z ** 2) -
                             self.aperture ** -2 * self.c[c_idx])
 
-    def store_patterns(self, patterns, n_adapt, washout, n_harvest, beta_D, beta_W_out, beta_G):
+    def store_patterns(self, patterns, n_adapt, washout, n_harvest, beta_D, beta_W_out, beta_G,
+                       noise_mean, noise_std):
+
+        if noise_mean is not None and noise_std is not None:
+            for i in range(len(patterns)):
+                noise = self.rng.normal(noise_mean, noise_std, (len(patterns[i]), self.signal_dim))
+                patterns[i] = patterns[i] + noise
         z_recordings = []
         r_recordings = []
         p_recordings = []
@@ -301,13 +310,23 @@ class RFCNetwork:
             self.number_of_patterns_stored += 1
 
 
-        # self.print_NRMSEs(z_recordings, r_recordings, p_recordings, beta_G)
-
         self.D = self.compute_D_rigde(z_recordings, p_recordings, beta_D)
         self.W_out = self.compute_W_out_ridge(r_recordings, p_recordings, beta_W_out)
         self.G = self.compute_G(z_recordings, beta_G)
-        self.print_NRMSEs(z_recordings, r_recordings, p_recordings, beta_G)
+        self.print_NRMSEs(z_recordings, r_recordings, p_recordings)
 
 
+    def drive_system(self, pattern, pattern_id):
+        self.reset_r_z()
+        for p_t in pattern:
+            self.r = np.tanh(self.G @ self.z + self.W_in @ np.atleast_1d(p_t) + self.b)
 
-# so Z_recordings = [recording_1,... where recording_1 = [r_0 for pattern 1. so
+            if self.number_of_patterns_stored == 0:
+                self.z = np.identity(self.M) @ np.transpose(self.F) @ self.r
+            else:
+                self.z = np.diag(self.c[pattern_id]) @ np.transpose(self.F) @ self.r
+    def record_chaotic(self, time, washout_pattern, pattern_id):
+        self.drive_system(washout_pattern,pattern_id)
+
+        _, y_recording = self.hallucinating(time=time,pattern_id=pattern_id, record_internal=False, record_y=True, reset_resevoir = False)
+        return y_recording
