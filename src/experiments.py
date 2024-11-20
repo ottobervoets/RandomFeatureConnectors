@@ -1,4 +1,4 @@
-from models.RFC_network_backup import RFCNetwork
+from legacy.RFC_network_backup import RFCNetwork
 from src.support_functions import *
 
 import numpy as np

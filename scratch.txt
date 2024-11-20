@@ -1,8 +1,8 @@
 TODO:
 
-File that makes it easy to do sinus etc. with plot.
-Baseclass/extended class
-Factory function
+DONE: File that makes it easy to do sinus etc. with plot
+DONE: Baseclass/extended class
+START: Factory function
 Optimizer
 Experiments + logging
 All signal generators

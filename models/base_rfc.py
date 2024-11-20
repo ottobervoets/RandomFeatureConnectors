@@ -18,13 +18,15 @@ class BaseRFC:
                  reproducible: bool = False,
                  seed: int = 294369130659753536483103517623731383366,
                  verbose: bool = False,
-                 **kwargs) -> None:
+                 **kwargs: object) -> None:
 
         if reproducible:
             self.rng = np.random.default_rng(seed)
         else:
             self.rng = np.random.default_rng()
         self.verbose = verbose
+        if(self.verbose):
+            print("default constructor")
         self.N = N
         self.M = M
         self.signal_dim = signal_dim
@@ -51,6 +53,8 @@ class BaseRFC:
         self.z = self.z_initial.copy()
         self.r = self.G @ self.z_initial.copy()
 
+
+
     def create_W(self, sparseness=0.1, W_spectral_radius=None):
         total_elements = self.N ** 2
         num_non_zero = int(total_elements * sparseness)
@@ -63,7 +67,7 @@ class BaseRFC:
         eigenvalues = np.linalg.eigvals(W_sparse)
         rho = np.max(np.abs(eigenvalues))
         if self.verbose:
-            print("spectral radius of W:", np.max(np.abs(np.linalg.eigvals(self.W))))
+            print("spectral radius of W:", np.max(np.abs(np.linalg.eigvals(W_sparse * (W_spectral_radius / rho)))))
         if W_spectral_radius is None:
             return W_sparse
         else:
