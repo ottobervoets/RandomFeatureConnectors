@@ -1,7 +1,6 @@
-from src.RFC_network import RFCNetwork
+from models.RFC_network_backup import RFCNetwork
 from src.support_functions import *
 
-import matplotlib.pyplot as plt
 import numpy as np
 import csv
 from src.defaultparms import *

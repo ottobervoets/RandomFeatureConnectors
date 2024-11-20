@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.linear_model import Ridge
-from scipy.optimize import minimize
-from src.RFC_network import RFCNetwork
+from models.RFC_network_backup import RFCNetwork
 
 
 class RFCNetwork2(RFCNetwork):

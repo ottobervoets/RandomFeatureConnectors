@@ -1,3 +1,42 @@
+TODO:
+
+File that makes it easy to do sinus etc. with plot.
+Baseclass/extended class
+Factory function
+Optimizer
+Experiments + logging
+All signal generators
+
+Config
+
+
+
+
+Base class
+- re compute everything, compute c_i's?
+- random F and G
+- Store last z state
+-
+
+
+
+
+
 Gestructureerde experimenten
 experiments aanpassen
 stapsgewijs optimaliseren
+
+
+
+1) Generate the maps
+
+2) store conceptors
+
+3) recalculate the maps.
+
+
+How to measure if it is able to store extra pattern?
+
+Adding extra dimention and rest two zero would atleast work as well.
+In other case, just base the mappings on a subset of the patterns.
+In each case step 1 can be done with only a subset, and the other 2 steps with the remaining part.
