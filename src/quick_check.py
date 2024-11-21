@@ -9,6 +9,7 @@ from src.defaultparms import default_parms
 # from src.RFC_network_old import *
 from models.base_rfc import BaseRFC
 from models.PCA_rfc import PCARFC
+from models.randomG_rfc import RandomGRFC
 import csv
 
 N = 100
@@ -130,10 +131,10 @@ def main_1_dim():
     beta_W_out = 0.01
     beta_G = 1
     beta_D = 0.01
-    aperture = 2
+    aperture = 8
     spectral_radius = 1.4
     N = 100
-    M = 200
+    M = 100
     n_adapt = 2000
     W_sr = 1.5
     W_sparseness = 0.1
@@ -147,9 +148,9 @@ def main_1_dim():
     patterns.append(random_pattern(3000, 4))
     patterns.append(random_pattern(3000, 5))
 
-    extra_agrs = {"patterns": patterns, "n_adapt": n_adapt, "washout": washout, "max_n_components": 0}
+    extra_agrs = {"patterns": patterns, "n_adapt": n_adapt, "washout": washout, "max_n_components": 50}
 
-    rfc = PCARFC(N=N,
+    rfc = RandomGRFC(N=N,
                   M=M,
                   signal_dim=1,
                   spectral_radius=spectral_radius,

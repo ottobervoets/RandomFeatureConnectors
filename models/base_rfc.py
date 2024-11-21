@@ -47,7 +47,7 @@ class BaseRFC:
 
         self.F = self.create_F(**kwargs)
         self.G = self.create_G(**kwargs)
-        self.spectral_radius_FG(spectral_radius)
+        self.spectral_radius_FG(spectral_radius) #make sure spectral radius is as desired
 
         self.z_initial = self.rng.normal(0, 0.5, self.M)
         self.z = self.z_initial.copy()

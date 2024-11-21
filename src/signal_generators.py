@@ -14,7 +14,7 @@ def random_pattern(n, period):
     return (random_sequence * (n // period + 1))[:n]
 
 
-def rossler_attractor(n, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
+def rossler_attractor(n=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
     # Initialize variables
     x, y, z = 0.0, 0.0, 0.0
     trajectory = []
@@ -36,11 +36,11 @@ def rossler_attractor(n, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
     trajectory = np.array(trajectory)
     #scale to [0,1]
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-
+    print(len(scaled_trajectory))
     return scaled_trajectory
 
 
-def lorenz_attractor(n, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/3):
+def lorenz_attractor(n=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/3):
     """
     Generate a normalized Lorenz attractor trajectory with specified length and parameters.
 
@@ -82,116 +82,26 @@ def lorenz_attractor(n, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/
     trajectory = np.array(trajectory[:n])  # Ensure exactly n samples
 
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-
+    print(len(scaled_trajectory))
     return scaled_trajectory
 
+def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=2500, subsample_rate = 10,normalize=True):
 
-def mackey_glass(n=1000, step_size=1/10, beta=0.2, gamma=0.1, tau=17, exponent=10):
-    """
-    Generate a normalized Mackey-Glass time series with specified length and parameters.
+    tau_dt = int(tau/dt)
+    washout = max(tau_dt, 5000)
+    x = np.ones(total_time*subsample_rate + washout + tau_dt)*1.2
+    time_series = []
+    for t in range(tau_dt,len(x)):
+        x[t] = x[t-1] + dt * (beta * x[t-1-tau_dt]/(1+x[t-1-tau_dt]**n) - gamma * x[t-1])
+        if t%subsample_rate == 0 and t>=(washout+tau_dt):
+            time_series.append([x[t],x[t-tau_dt]])
 
-    Parameters:
-    - n (int): Length of the final time series.
-    - step_size (float): Step size for Euler approximation. Default is 1/10.
-    - beta (float): Mackey-Glass parameter. Default is 0.2.
-    - gamma (float): Mackey-Glass parameter. Default is 0.1.
-    - tau (int): Delay term for the Mackey-Glass equation. Default is 17.
-    - exponent (int): Exponent in the Mackey-Glass equation. Default is 10.
-
-    Returns:
-    - np.ndarray: A 2-dimensional array with normalized pairs (x(t), x(t - tau)).
-    """
-    # Compute the number of total steps needed
-    total_steps = n + tau
-
-    # Initialize the time series with small random values for the warm-up period
-    time_series = np.zeros(total_steps)
-    time_series[0:tau] = 0.5   # Starting condition
-
-    # Euler approximation to solve the delay differential equation
-    for t in range(tau, total_steps - 1):
-        x_tau = time_series[t - tau]
-        dx = beta * x_tau / (1 + x_tau ** exponent) - gamma * time_series[t]
-        time_series[t + 1] = time_series[t] + step_size * dx
-        # print(time_series[t+1], dx)
-
-    # Create the 2-dimensional time series (x(t), x(t - tau))
-    pairs = np.array([[time_series[t], time_series[t - tau]] for t in range(tau, total_steps)])
-    print(pairs.shape)
-    # Take only the first `n` samples for the output
-    pairs = pairs[:n]
-    plt.plot(pairs[:,0], pairs[:,1])
-    plt.show()
-
-    # Normalize each channel to the range [0, 1]
-    scaled_trajectory = (pairs - np.min(pairs)) / (np.max(pairs) - np.min(pairs))
-
-    return scaled_trajectory
-
-def mackey_glass_1(length, x0=None, a=0.2, b=0.1, c=10.0, tau=17,
-                 n=1000, sample=0.46, discard=250):
-    """Generate time series using the Mackey-Glass equation.
-
-    Generates time series using the discrete approximation of the
-    Mackey-Glass delay differential equation described by Grassberger &
-    Procaccia (1983).
-
-    Parameters
-    ----------
-    length : int, optional (default = 10000)
-        Length of the time series to be generated.
-    x0 : array, optional (default = random)
-        Initial condition for the discrete map.  Should be of length n.
-    a : float, optional (default = 0.2)
-        Constant a in the Mackey-Glass equation.
-    b : float, optional (default = 0.1)
-        Constant b in the Mackey-Glass equation.
-    c : float, optional (default = 10.0)
-        Constant c in the Mackey-Glass equation.
-    tau : float, optional (default = 23.0)
-        Time delay in the Mackey-Glass equation.
-    n : int, optional (default = 1000)
-        The number of discrete steps into which the interval between
-        t and t + tau should be divided.  This results in a time
-        step of tau/n and an n + 1 dimensional map.
-    sample : float, optional (default = 0.46)
-        Sampling step of the time series.  It is useful to pick
-        something between tau/100 and tau/10, with tau/sample being
-        a factor of n.  This will make sure that there are only whole
-        number indices.
-    discard : int, optional (default = 250)
-        Number of n-steps to discard in order to eliminate transients.
-        A total of n*discard steps will be discarded.
-
-    Returns
-    -------
-    x : array
-        Array containing the time series.
-    """
-    sample = int(n * sample / tau)
-    grids = n * discard + sample * length
-    x = np.empty(grids)
-
-    if not x0:
-        x[:n] = 0.5 + 0.05 * (-1 + 2 * np.random.random(n))
-    else:
-        x[:n] = x0
-
-    A = (2 * n - b * tau) / (2 * n + b * tau)
-    B = a * tau / (2 * n + b * tau)
-
-    for i in range(n - 1, grids - 1):
-        x[i + 1] = A * x[i] + B * (x[i - n] / (1 + x[i - n] ** c) +
-                                   x[i - n + 1] / (1 + x[i - n + 1] ** c))
-    time_series = x[n * discard::sample]
-    pairs = np.array([[time_series[t], time_series[t - tau]] for t in range(tau, length)])
-    scaled_trajectory = (pairs - np.min(pairs)) / (np.max(pairs) - np.min(pairs))
-
-
-    # plt.plot(pairs[:,0], pairs[:,1])
-    # plt.show()
-    return scaled_trajectory
-
+    time_series = np.array(time_series)
+    # Normalize to [0, 1] range if required
+    if normalize:
+        time_series = (time_series - np.min(time_series)) / (np.max(time_series) - np.min(time_series))
+    print(len(time_series))
+    return time_series
 
 def henon_attractor(n=1000, a=1.4, b=0.3):
     """
@@ -225,6 +135,17 @@ def henon_attractor(n=1000, a=1.4, b=0.3):
 
     # Normalize each component separately to range [0, 1]
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
+    print(len(scaled_trajectory))
 
     return scaled_trajectory
 
+if __name__ == "__main__":
+    functions = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
+    # functions = [mackey_glass, henon_attractor]
+    for func in functions:
+        results = func()
+        if func.__name__ == "henon_attractor":
+            plt.plot(results[:, 0], results[:, 1], 'o', markersize=1)
+        else:
+            plt.plot(results[:,0], results[:,1], linewidth = 0.5)
+        plt.show()
