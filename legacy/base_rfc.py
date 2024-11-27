@@ -56,7 +56,7 @@ class BaseRFC:
         self.z = self.z_initial.copy()
         self.r = self.G @ self.z_initial.copy()
 
-        self.training_patterns = None
+        self.training_patterns = "hoi"
 
 
     def create_W(self, sparseness=0.1, W_spectral_radius=None):

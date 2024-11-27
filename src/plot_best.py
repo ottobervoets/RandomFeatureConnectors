@@ -33,20 +33,27 @@ def predict_choatic_systems(test_length=84, **best_params):
 
     pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     # add training pattern to params.
-    best_params['training_patterns'] = []
-    true_patterns = [] #todo make dict, just like the starting values.
+    best_params['training_patterns'] = {}
+    best_params['apperture'] = {}
+    true_patterns = {} #todo make dict, just like the starting values.
     training_length = best_params['n_adapt'] + best_params['washout']
+    total_pattern = {}
     for pattern_generator in pattern_generators:
-        total_pattern = pattern_generator(total_time=training_length + test_length)
-        best_params['training_patterns'].append(total_pattern[0:training_length])
-        true_patterns.append(total_pattern[training_length:test_length + training_length])
+        total_pattern[pattern_generator.__name__] = pattern_generator(total_time=training_length + test_length)
+        best_params['training_patterns'][pattern_generator.__name__] = total_pattern[pattern_generator.__name__][0:training_length]
+        true_patterns[pattern_generator.__name__] = total_pattern[pattern_generator.__name__][training_length:(training_length+test_length)]
+        best_params['apperture'][pattern_generator.__name__] = 150
     rfc = create_RFC(**best_params)
+    # print(rfc.training_patterns, "after construction")
     rfc.store_patterns(**best_params)
+    # print("#######",total_pattern["henon_attractor"][0] - rfc.training_patterns["henon_attractor"][0])
+    # print("--------", np.shape(total_pattern["henon_attractor"]), np.shape(rfc.training_patterns["henon_attractor"]))
+    # print("++++", rfc.training_patterns.keys(), total_pattern.keys())
     result = {}
     for idp in range(len(true_patterns)):
         name = pattern_generators[idp].__name__
-        predict = rfc.record_chaotic(test_length, pattern_id=idp)
-        true = true_patterns[idp]
+        predict = rfc.record_chaotic(test_length, pattern_name=name)
+        true = true_patterns[name]
         nmrse = NRMSE_2_dim(predict,
                             true)
         result[name] = {'true':true,
@@ -111,6 +118,7 @@ if __name__ == "__main__":
 
     best_params = default_parmas_chaotic
     best_params['verbose'] = True
+    # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
     results = predict_choatic_systems(test_length=84, **best_params)

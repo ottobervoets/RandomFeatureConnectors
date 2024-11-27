@@ -15,7 +15,7 @@ class PCARFC(BaseRFC):
             UserWarning("M is to low to accomodate the desired number of components")
             max_n_components = int(np.floor(self.M/len(patterns)))
         F = []
-        for pattern in patterns:
+        for name, pattern in patterns.items():
             R = [] #matrix containing reservoir states
             r = np.random.normal(0, 0.5, size=self.N)
             for t in range(washout):

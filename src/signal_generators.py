@@ -36,7 +36,7 @@ def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsampl
     trajectory = np.array(trajectory)
     #scale to [0,1]
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-    print(len(scaled_trajectory))
+    # print(len(scaled_trajectory))
     return scaled_trajectory
 
 
@@ -82,7 +82,7 @@ def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=15, sigma=
     trajectory = np.array(trajectory[:total_time])  # Ensure exactly n samples
 
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-    print(len(scaled_trajectory))
+    # print(len(scaled_trajectory))
     return scaled_trajectory
 
 def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=2500, subsample_rate = 10,normalize=True):
@@ -100,7 +100,7 @@ def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=2500, sub
     # Normalize to [0, 1] range if required
     if normalize:
         time_series = (time_series - np.min(time_series)) / (np.max(time_series) - np.min(time_series))
-    print(len(time_series))
+    # print(len(time_series))
     return time_series
 
 def henon_attractor(total_time=1000, a=1.4, b=0.3):
@@ -135,7 +135,7 @@ def henon_attractor(total_time=1000, a=1.4, b=0.3):
 
     # Normalize each component separately to range [0, 1]
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-    print(len(scaled_trajectory))
+    # print(len(scaled_trajectory))
 
     return scaled_trajectory
 

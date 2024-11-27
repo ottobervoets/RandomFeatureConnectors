@@ -17,19 +17,13 @@ def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int =
     :param kwargs:
     :return:
     '''
-    # unexpected_keys = set(kwargs) - default_parmas_chaotic.keys()
-    # if unexpected_keys:
-    #     raise ValueError(f"Unexpected parameter(s): {', '.join(unexpected_keys)}")
 
     rfc = create_RFC(rfc_type, **kwargs)
-    print(type(rfc))
     rfc.store_patterns(**kwargs)
     nrmses = []
-
-    for idp in range(len(test_pattern)):
-        result = rfc.record_chaotic(test_length, pattern_id=idp)
-        print(np.shape(test_pattern))
-        nmrse = NRMSE_2_dim(test_pattern[idp],
+    for key, value in test_pattern.items():
+        result = rfc.record_chaotic(test_length, pattern_name=key)
+        nmrse = NRMSE_2_dim(test_pattern[key],
                             result)
         if nmrse > 0.5:
             print(f"NMRSE large{nmrse} for pattern {test_pattern.keys(idp)}")
@@ -43,16 +37,20 @@ def n_experiments_chaotic(n_rep, rfc_type, test_length=84, **kwargs):
 
     pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     # add training pattern to params.
-    kwargs['training_patterns'] = []
-    test_patterns = [] #todo make dict, just like the starting values.
+    kwargs['training_patterns'] = {}
+    kwargs['apperture'] = {}
+    true_patterns = {}  # todo make dict, just like the starting values.
     training_length = kwargs['n_adapt'] + kwargs['washout']
+    total_pattern = {}
     for pattern_generator in pattern_generators:
-        total_pattern = pattern_generator(total_time=training_length + test_length)
-        kwargs['training_patterns'].append(total_pattern[0:training_length])
-        test_patterns.append(total_pattern[training_length:test_length + training_length])
+        total_pattern[pattern_generator.__name__] = pattern_generator(total_time=training_length + test_length)
+        kwargs['training_patterns'][pattern_generator.__name__] = total_pattern[pattern_generator.__name__][
+                                                                       0:training_length]
+        true_patterns[pattern_generator.__name__] = total_pattern[pattern_generator.__name__][
+                                                    training_length:(training_length + test_length)]
 
     for experiment in range(n_rep):
-        mean_nrmses, _ = one_experiment_chaotic(test_pattern=test_patterns,
+        mean_nrmses, _ = one_experiment_chaotic(test_pattern=true_patterns,
                                                 rfc_type=rfc_type, test_length=test_length,
                                                 **kwargs)
         results.append(mean_nrmses)
@@ -60,7 +58,6 @@ def n_experiments_chaotic(n_rep, rfc_type, test_length=84, **kwargs):
 
 
 def parameter_step(current_parameter_value, info_dict, direction):
-    print(info_dict, "here")
     # Determine the step value first
     match info_dict["step_type"]:
         case "relative":
@@ -112,7 +109,7 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     print(f"Optimizing with the following settings {settings}")
     for _ in range(settings['cycles']):
         for current_parameter, info_dict in parameters_to_optimize.items():
-            optimized_params['nrmse'] = n_experiments_chaotic( **optimized_params)
+            optimized_params['nrmse'] = n_experiments_chaotic(**optimized_params)
             left_params = optimized_params.copy()
             right_params = optimized_params.copy()
             left_params['nrmse'] = 0
@@ -144,7 +141,6 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
 
 def write_experiment_results(results, filename):
     file_exists = os.path.isfile(filename)
-    print(filename)
     with open(filename, mode='a', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=results.keys())
 

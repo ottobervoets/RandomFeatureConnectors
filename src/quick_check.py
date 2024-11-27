@@ -136,15 +136,15 @@ def main_1_dim():
     N = 100
     M = 500
     n_adapt = 2000
-    W_sr = 1.5
+    W_sr = 1.4
     W_sparseness = 0.1
 
 
-    patterns = []
-    patterns.append(sinus_discrete(3000, 9.83))
-    patterns.append(sinus_discrete(3000, 8.83))
-    patterns.append(random_pattern(3000, 4))
-    patterns.append(random_pattern(3000, 5))
+    patterns = {}
+    patterns["sinus_1"] = sinus_discrete(3000, 9.83)
+    patterns["sinus_2"] = sinus_discrete(3000, 8.83)
+    patterns["discrete_1"] = random_pattern(3000, 4)
+    patterns["discrete_2"] = random_pattern(3000, 5)
 
     extra_agrs = {"patterns": patterns, "n_adapt": n_adapt, "washout": washout, "max_n_components": 50}
 
@@ -169,16 +169,17 @@ def main_1_dim():
                        beta_G=beta_G)
 
     i = 0
-    for conceptor in rfc.c:
+    for conceptor in rfc.c.values():
         plt.plot(np.sort(conceptor), label=f"{i}")
         i += 1
     plt.legend()
     plt.show()
+    for key, value in patterns.items():
+        result = rfc.record_chaotic(20, key)
 
-    for i in range(len(patterns)):
-        result = rfc.record_chaotic(300, i)
-
-        plot_aligned_series_with_optimal_shift(patterns[i][0:20], result, max_shift=100)
+        # plot_aligned_series_with_optimal_shift(value[0:20], result, max_shift=200)
+        plt.plot(result)
+        plt.plot(value[n_harvest+washout:n_harvest+washout+20])
         plt.show()
 
 
