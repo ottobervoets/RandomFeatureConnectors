@@ -108,7 +108,6 @@ class BaseRFC:
 
     def one_step_driving(self, pattern, pattern_id: int = None):
         self.r = np.tanh(self.G @ self.z + self.W_in @ np.atleast_1d(pattern) + self.b)
-
         if pattern_id is None:
             self.z = np.identity(self.M) @ np.transpose(self.F) @ self.r
         else:
@@ -145,7 +144,7 @@ class BaseRFC:
         if self.verbose:
             print("conceptors constructed", np.shape(self.c))
 
-    def record_r_z(self, pattern_id, n_washout: int, n_harvest: int, pattern: list[float]):
+    def record_r_z(self, pattern_id, n_washout: int, n_harvest: int, pattern):
         record_r = []
         record_z = []
         record_p = []
@@ -163,7 +162,7 @@ class BaseRFC:
         return record_r, record_z, record_p
 
     def compute_W_out_ridge(self, r_recordings, patterns, beta_W_out):
-        y = np.array(np.hstack(patterns))
+        y = np.array(np.vstack(patterns))
         X = np.vstack(r_recordings)
         ridge = Ridge(alpha=beta_W_out, fit_intercept=False)
         ridge.fit(X, y)
@@ -172,8 +171,7 @@ class BaseRFC:
         return W_out_optimized
 
     def compute_D_rigde(self, z_recordings, p_recordings, beta_D):
-
-        p_stacked = np.hstack(p_recordings)
+        p_stacked = np.vstack(p_recordings)
         y = [self.W_in @ np.atleast_1d(p_t) for p_t in p_stacked]
         X = np.vstack(z_recordings)
         ridge = Ridge(alpha=beta_D, fit_intercept=False)
@@ -209,25 +207,23 @@ class BaseRFC:
                   f" of {(np.linalg.norm(self.G) - np.linalg.norm(G_optimized)) / np.linalg.norm(self.G):.2f}")
         return G_optimized
 
-    def store_patterns(self, patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
-                       noise_std=None):
-
+    def store_patterns(self, training_patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
+                       noise_std=None, **kwargs):
         if noise_std is not None:
-            for i in range(len(patterns)):
-                noise = self.rng.normal(0, noise_std, (len(patterns[i]), self.signal_dim))
-                patterns[i] = patterns[i] + noise
+            for i in range(len(training_patterns)):
+                noise = self.rng.normal(0, noise_std, (len(training_patterns[i]), self.signal_dim))
+                training_patterns[i] = training_patterns[i] + noise
         z_recordings = []
         r_recordings = []
         p_recordings = []
 
-        self.construct_c(patterns, washout, n_harvest)
+        self.construct_c(training_patterns, washout, n_harvest)
 
-        for pattern_id in range(len(patterns)):
-            record_r, record_z, record_p = self.record_r_z(pattern=patterns[pattern_id],
+        for pattern_id in range(len(training_patterns)):
+            record_r, record_z, record_p = self.record_r_z(pattern=training_patterns[pattern_id],
                                                            n_harvest=n_harvest,
                                                            n_washout=washout,
                                                            pattern_id=pattern_id)
-
             z_recordings.append(record_z)
             r_recordings.append(record_r)
             p_recordings.append(record_p)

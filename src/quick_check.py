@@ -134,7 +134,7 @@ def main_1_dim():
     aperture = 8
     spectral_radius = 1.4
     N = 100
-    M = 100
+    M = 500
     n_adapt = 2000
     W_sr = 1.5
     W_sparseness = 0.1
@@ -185,7 +185,7 @@ def main_1_dim():
 
 
 if __name__ == "__main__":
-    main_1_dim()
+    main_2_dim()
     #
     # try:
     #     main_1_dim()

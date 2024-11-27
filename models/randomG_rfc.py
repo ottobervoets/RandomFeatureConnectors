@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 from models.base_rfc import BaseRFC
 from models.PCA_rfc import PCARFC
 
-class RandomGRFC(PCARFC):
+class RandomGRFC(BaseRFC):
     def create_G(self, **kwargs):
         if self.verbose:
             print("constructing random G")

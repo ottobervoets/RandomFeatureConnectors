@@ -14,12 +14,12 @@ def random_pattern(n, period):
     return (random_sequence * (n // period + 1))[:n]
 
 
-def rossler_attractor(n=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
+def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
     # Initialize variables
     x, y, z = 0.0, 0.0, 0.0
     trajectory = []
 
-    for i in range(n*subsample):
+    for i in range(total_time*subsample):
         # Compute derivatives
         dx = -(y + z)
         dy = x + a * y
@@ -40,7 +40,7 @@ def rossler_attractor(n=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
     return scaled_trajectory
 
 
-def lorenz_attractor(n=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/3):
+def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/3):
     """
     Generate a normalized Lorenz attractor trajectory with specified length and parameters.
 
@@ -56,7 +56,7 @@ def lorenz_attractor(n=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28,
     - np.ndarray: A 2-dimensional array containing the normalized x and z coordinates.
     """
     # Compute the required total steps
-    total_steps = n * subsample_rate
+    total_steps = total_time * subsample_rate
 
     # Initialize starting conditions
     x, y, z = 1.0, 1.0, 1.0
@@ -79,7 +79,7 @@ def lorenz_attractor(n=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28,
             trajectory.append([x, z])
 
     # Convert to numpy array for normalization
-    trajectory = np.array(trajectory[:n])  # Ensure exactly n samples
+    trajectory = np.array(trajectory[:total_time])  # Ensure exactly n samples
 
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
     print(len(scaled_trajectory))
@@ -103,7 +103,7 @@ def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=2500, sub
     print(len(time_series))
     return time_series
 
-def henon_attractor(n=1000, a=1.4, b=0.3):
+def henon_attractor(total_time=1000, a=1.4, b=0.3):
     """
     Generate a normalized Hénon attractor time series with specified length and parameters.
 
@@ -120,7 +120,7 @@ def henon_attractor(n=1000, a=1.4, b=0.3):
     trajectory = []
 
     # Iterate to generate the attractor sequence
-    for _ in range(n):
+    for _ in range(total_time):
         x_next = y + 1 - a * x**2
         y_next = b * x
 
@@ -138,6 +138,8 @@ def henon_attractor(n=1000, a=1.4, b=0.3):
     print(len(scaled_trajectory))
 
     return scaled_trajectory
+
+
 
 if __name__ == "__main__":
     functions = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]

@@ -1,10 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from signal_generators import *
 
-ls = [[1,2,3],[4,6]]
+ls = [0,1,2,3,4]
 
-for i in range(len(ls)):
-    ls[i] += np.ones(len(ls[i]))
-
-print(ls)
+print(ls[0:2], ls[2:4])
