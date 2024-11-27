@@ -51,7 +51,7 @@ def find_optimal_phase_shift(true_series, predicted_series, max_shift):
     return best_shift, best_nrmse
 
 
-def plot_aligned_series_with_optimal_shift(true_series, predicted_series, max_shift=20, segment_range=None):
+def plot_aligned_series_with_optimal_shift(true_series, predicted_series, max_shift=20):
     """
     Plot a segment of both time series in the same figure, optimally phase-aligned, and show NRMSE.
 

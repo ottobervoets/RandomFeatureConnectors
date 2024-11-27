@@ -24,24 +24,24 @@ default_parms = {
 }
 
 default_parmas_chaotic = {
-    'n_harvest': 400,
+    'n_harvest': 800,
     'washout': 500,
     'beta_W_out': 0.01,
     'beta_G': 1,
     'beta_D': 0.01,
-    'aperture': 200,
+    'aperture': 500,
     'spectral_radius': 1.4,
     'N': 500,
     'M': 2500,
     'n_adapt': 2000,
-    'W_sr': 1.5,
+    'W_sr': 1.4,
     'W_sparseness': 0.1,
     'd_dim': "reservoir_dim",
     'F_method': "patterns",
     'signal_dim': 2,
     'G_method': "W_F",
     'noise_mean': None,
-    'noise_std': 0.001,
+    'noise_std': 0.01,
     'rfc_type': 'PCARFC',
     'max_n_features': 500,
     'verbose': False
@@ -51,7 +51,7 @@ default_parmas_chaotic = {
 parameters_to_optimize = {  # idea for optmization.
     'beta_G': {
         'step_type': 'relative',
-        'step_size': 0.10,
+        'step_size': 0.25,
         'boundaries': [0, 10]
     },
     'aperture': {
@@ -61,12 +61,12 @@ parameters_to_optimize = {  # idea for optmization.
     },
     'beta_W_out': {
         'step_type': 'relative',
-        'step_size': 0.10,
+        'step_size': 0.25,
         'boundaries': [0, 10]
     },
     'beta_D': {
         'step_type': 'relative',
-        'step_size': 0.10,
+        'step_size': 0.25,
         'boundaries': [0, 10]
     },
     'max_n_features': {

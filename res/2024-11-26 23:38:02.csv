@@ -1,0 +1,9 @@
+n_harvest,washout,learning_rate_c,beta_W_out,beta_G,beta_D,aperture,spectral_radius,N,M,n_adapt,W_sr,W_sparseness,d_dim,F_method,signal_dim,G_method,noise_mean,noise_std,rfc_type,max_n_features,verbose,max_iterations,experiment_name,cycles,n_rep,nrmse
+400,500,0.5,0.01,1.1,0.01,8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.008451992185493633
+400,500,0.5,0.01,0.9,0.01,8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.00628290099044179
+400,500,0.5,0.01,1,0.01,8.8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.005558042591369921
+400,500,0.5,0.01,1,0.01,7.2,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.01110064536698898
+400,500,0.5,0.01,1.1,0.01,8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.005740704796807067
+400,500,0.5,0.01,0.9,0.01,8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.006715123759769836
+400,500,0.5,0.01,1,0.01,8.8,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.004296343825221953
+400,500,0.5,0.01,1,0.01,7.2,1.4,100,500,2000,1.5,0.1,reservoir_dim,patterns,2,W_F,,,PCARFC,100,True,10,../res/2024-11-26 23:38:02.csv,2,1,0.007344633766828378

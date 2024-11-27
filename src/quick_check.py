@@ -127,7 +127,6 @@ def main_2_dim():
 def main_1_dim():
     n_harvest = 800
     washout = 500
-    learning_rate_c = 0.5
     beta_W_out = 0.01
     beta_G = 1
     beta_D = 0.01
@@ -138,9 +137,7 @@ def main_1_dim():
     n_adapt = 2000
     W_sr = 1.5
     W_sparseness = 0.1
-    d_dim = "reservoir_dim"
-    F_method = "patterns"
-    G_method = "W_F"
+
 
     patterns = []
     patterns.append(sinus_discrete(3000, 9.83))
@@ -150,7 +147,7 @@ def main_1_dim():
 
     extra_agrs = {"patterns": patterns, "n_adapt": n_adapt, "washout": washout, "max_n_components": 50}
 
-    rfc = RandomGRFC(N=N,
+    rfc = BaseRFC(N=N,
                   M=M,
                   signal_dim=1,
                   spectral_radius=spectral_radius,
@@ -158,12 +155,12 @@ def main_1_dim():
                   W_sr=W_sr,
                   W_sparseness=W_sparseness,
                   verbose=True,
-                  patterns = patterns,
+                  training_patterns = patterns,
                  n_adapt = n_adapt,
                  washout = washout,
-                 max_n_components = 50)
+                 max_n_features = 50)
 
-    rfc.store_patterns(patterns=patterns,
+    rfc.store_patterns(training_patterns=patterns,
                        washout=washout,
                        n_harvest=n_harvest,
                        beta_D=beta_D,
@@ -178,14 +175,14 @@ def main_1_dim():
     plt.show()
 
     for i in range(len(patterns)):
-        _, result = rfc.hallucinating(800, i, False, True)
+        result = rfc.record_chaotic(300, i)
 
-        plot_aligned_series_with_optimal_shift(patterns[i][0:20], result[400:], max_shift=299, segment_range=(0, 600))
+        plot_aligned_series_with_optimal_shift(patterns[i][0:20], result, max_shift=100)
         plt.show()
 
 
 if __name__ == "__main__":
-    main_2_dim()
+    main_1_dim()
     #
     # try:
     #     main_1_dim()
