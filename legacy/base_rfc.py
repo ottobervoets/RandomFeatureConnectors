@@ -33,6 +33,7 @@ class BaseRFC:
         self.aperture = aperture
 
         self.c = []
+        self.c_matrix = []
         self.number_of_patterns_stored = 0
         self.last_training_z_state = []
 
@@ -46,6 +47,8 @@ class BaseRFC:
         self.b = self.rng.normal(b_mean, b_std, self.N)
 
         self.F = self.create_F(**kwargs)
+        self.F_transpose = np.transpose(self.F)
+        self.M_identity_F = np.identity(self.M) @ self.F_transpose
         self.G = self.create_G(**kwargs)
         self.spectral_radius_FG(spectral_radius) #make sure spectral radius is as desired
 
@@ -53,6 +56,7 @@ class BaseRFC:
         self.z = self.z_initial.copy()
         self.r = self.G @ self.z_initial.copy()
 
+        self.training_patterns = None
 
 
     def create_W(self, sparseness=0.1, W_spectral_radius=None):
@@ -102,16 +106,20 @@ class BaseRFC:
         self.r = np.tanh(self.G @ self.z + self.D @ self.z + self.b)
 
         if self.number_of_patterns_stored == 0:
-            self.z = np.identity(self.M) @ np.transpose(self.F) @ self.r
+            self.z = np.identity(self.M) @ self.F_transpose @ self.r
         else:
-            self.z = np.diag(self.c[pattern_id]) @ np.transpose(self.F) @ self.r
+            self.z = np.diag(self.c[pattern_id]) @ self.F_transpose @ self.r
 
     def one_step_driving(self, pattern, pattern_id: int = None):
-        self.r = np.tanh(self.G @ self.z + self.W_in @ np.atleast_1d(pattern) + self.b)
+        if self.signal_dim == 1:
+            pattern = np.atleast_1d(pattern)
+        self.r = np.tanh(self.G @ self.z + self.W_in @ pattern + self.b)
         if pattern_id is None:
-            self.z = np.identity(self.M) @ np.transpose(self.F) @ self.r
+            # self.z = self.M_identity_F @ self.r
+            self.z = np.identity(self.M) @ self.F_transpose @ self.r
         else:
-            self.z = np.diag(self.c[pattern_id]) @ np.transpose(self.F) @ self.r
+            self.z = self.c_matrix[pattern_id] @ self.F_transpose @ self.r
+
 
     def hallucinating(self, length, pattern_id: int = None, record_internal: bool = False, record_y: bool = False):
         self.set_z_state(pattern_id)
@@ -127,38 +135,61 @@ class BaseRFC:
                 recording_y.append(self.W_out @ self.r)
         return recording_internal, recording_y
 
+    # def one_step_drive_simple(self, pattern):
+    #     if self.signal_dim < 2:
+    #         pattern = np.atleast_1d(pattern)
+    #     self.r = np.tanh(self.W @ self.r + self.W_in @ pattern + self.b)
+    #
+    # def construct_c(self, patterns, n_washout: int, n_harvest: int):
+    #     for pattern in patterns:
+    #         self.r = np.zeros(self.N)
+    #         for t in range(n_washout):
+    #             self.one_step_drive_simple(pattern[t])
+    #         collected_z = np.zeros(shape=(n_harvest, self.M))
+    #         for t in range(n_washout, n_washout + n_harvest):
+    #             self.one_step_drive_simple(pattern[t])
+    #             collected_z[t-n_washout] = self.F_transpose @ self.r
+    #
+    #         mean_z_squared = np.mean(collected_z ** 2, axis=0)
+    #         conceptor_weights = mean_z_squared / (mean_z_squared + self.aperture ** -2)
+    #         self.c.append(conceptor_weights)
+    #         self.c_matrix.append(np.diag(conceptor_weights))
+    #         self.last_training_z_state.append(self.z)
+    #     if self.verbose:
+    #         print("conceptors constructed", np.shape(self.c))
+
     def construct_c(self, patterns, n_washout: int, n_harvest: int):
         for pattern in patterns:
             for t in range(n_washout):
                 self.one_step_driving(pattern[t], pattern_id=None)
-            collected_z = []
+            collected_z = np.zeros(shape=(n_harvest, self.M))
             for t in range(n_washout, n_washout + n_harvest):
                 self.one_step_driving(pattern[t], pattern_id=None)
-                collected_z.append(self.z)
-            collected_z = np.array(collected_z)
+                collected_z[t-n_washout] = self.z
 
             mean_z_squared = np.mean(collected_z ** 2, axis=0)
             conceptor_weights = mean_z_squared / (mean_z_squared + self.aperture ** -2)
             self.c.append(conceptor_weights)
+            self.c_matrix.append(np.diag(conceptor_weights))
             self.last_training_z_state.append(self.z)
         if self.verbose:
             print("conceptors constructed", np.shape(self.c))
 
     def record_r_z(self, pattern_id, n_washout: int, n_harvest: int, pattern):
-        record_r = []
-        record_z = []
-        record_p = []
+        record_r = np.zeros((n_harvest,self.N))
+        record_z = np.zeros((n_harvest,self.M))
+        record_p = np.zeros((n_harvest, self.signal_dim))
 
         self.set_z_state(None)
         for t in range(n_washout):
             self.one_step_driving(pattern[t], pattern_id=pattern_id)
 
         for t in range(n_washout, n_washout + n_harvest):
-            record_z.append(self.z)
+            record_z[t-n_washout] = self.z
             self.one_step_driving(pattern[t], pattern_id=pattern_id)
-            record_r.append(self.r)
-            record_p.append(np.atleast_1d(pattern[t]))
-        print("record p, should be 800,", np.shape(record_p))
+            record_r[t-n_washout] = self.r
+            record_p[[t-n_washout]]= pattern[t]
+
         return record_r, record_z, record_p
 
     def compute_W_out_ridge(self, r_recordings, patterns, beta_W_out):
@@ -171,9 +202,7 @@ class BaseRFC:
         return W_out_optimized
 
     def compute_D_rigde(self, z_recordings, p_recordings, beta_D):
-        print("bevore vstack", np.shape(p_recordings))
         p_stacked = np.vstack(p_recordings)
-        print("vstack shape", p_stacked.shape)
         y = [self.W_in @ np.atleast_1d(p_t) for p_t in p_stacked]
         X = np.vstack(z_recordings)
         ridge = Ridge(alpha=beta_D, fit_intercept=False)
@@ -211,6 +240,7 @@ class BaseRFC:
 
     def store_patterns(self, training_patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
                        noise_std=None, **kwargs):
+        self.training_patterns = training_patterns
         if noise_std is not None:
             for i in range(len(training_patterns)):
                 noise = self.rng.normal(0, noise_std, (len(training_patterns[i]), self.signal_dim))
