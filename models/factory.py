@@ -1,6 +1,6 @@
-from models.base_rfc import BaseRFC
 from models.PCA_rfc import PCARFC
 from models.randomG_rfc import RandomGRFC
+from models.base_rfc import BaseRFC
 
 def create_RFC(rfc_type = "base", **kwargs):
     match(rfc_type):

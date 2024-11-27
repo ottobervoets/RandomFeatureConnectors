@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from src.experiments import *
 from src.defaultparms import default_parms
 # from src.RFC_network_old import *
+# from models.base_rfc import BaseRFC
 from models.base_rfc import BaseRFC
 from models.PCA_rfc import PCARFC
 from models.randomG_rfc import RandomGRFC
@@ -147,7 +148,7 @@ def main_1_dim():
 
     extra_agrs = {"patterns": patterns, "n_adapt": n_adapt, "washout": washout, "max_n_components": 50}
 
-    rfc = BaseRFC(N=N,
+    rfc = PCARFC(N=N,
                   M=M,
                   signal_dim=1,
                   spectral_radius=spectral_radius,

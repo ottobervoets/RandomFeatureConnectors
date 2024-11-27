@@ -1,8 +1,7 @@
 import numpy as np
-from sklearn.decomposition import PCA
 
-from models.base_rfc import BaseRFC
-from models.PCA_rfc import PCARFC
+from legacy.base_rfc import BaseRFC
+
 
 class RandomGRFC(BaseRFC):
     def create_G(self, **kwargs):

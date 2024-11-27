@@ -24,15 +24,15 @@ default_parms = {
 }
 
 default_parmas_chaotic = {
-    'n_harvest': 800,
+    'n_harvest': 2000,
     'washout': 500,
     'beta_W_out': 0.01,
     'beta_G': 1,
     'beta_D': 0.01,
-    'aperture': 500,
+    'aperture': 300,
     'spectral_radius': 1.4,
     'N': 500,
-    'M': 2500,
+    'M': 500,
     'n_adapt': 2000,
     'W_sr': 1.4,
     'W_sparseness': 0.1,
@@ -41,7 +41,7 @@ default_parmas_chaotic = {
     'signal_dim': 2,
     'G_method': "W_F",
     'noise_mean': None,
-    'noise_std': 0.01,
+    'noise_std': 0.001,
     'rfc_type': 'PCARFC',
     'max_n_features': 500,
     'verbose': False
