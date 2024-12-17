@@ -27,8 +27,8 @@ def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int =
         result = rfc.record_chaotic(test_length, pattern_name=key)
         nmrse = NRMSE_2_dim(test_pattern[key],
                             result)
-        if nmrse > 0.5:
-            print(f"NMRSE large{nmrse} for pattern {test_pattern.keys(idp)}")
+        # if nmrse > 0.5:
+            # print(f"NMRSE large{nmrse} for pattern {test_pattern.keys()}")
         nrmses.append(nmrse)
 
     return np.mean(nrmses), nrmses
@@ -168,7 +168,7 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
-    default_parmas_chaotic['rfc_type'] = 'base'
+    default_parmas_chaotic['rfc_type'] = 'PCARFC'
     print(parameters_to_optimize.keys())
     optimize_parameters_chaotic(parameters_to_optimize=parameters_to_optimize, default_parms=default_parmas_chaotic,
                                 optimization_settings=optimization_settings)
