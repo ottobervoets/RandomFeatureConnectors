@@ -14,7 +14,7 @@ def random_pattern(n, period):
     return (random_sequence * (n // period + 1))[:n]
 
 
-def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=150):
+def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsample=75):
     # Initialize variables
     x, y, z = 0.0, 0.0, 0.0
     trajectory = []
@@ -40,7 +40,7 @@ def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsampl
     return scaled_trajectory
 
 
-def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=20, sigma=10, r=28, b=8/3):
+def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=12, sigma=10, r=28, b=8/3):
     """
     Generate a normalized Lorenz attractor trajectory with specified length and parameters.
 
@@ -85,7 +85,7 @@ def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=20, sigma=
     # print(len(scaled_trajectory))
     return scaled_trajectory
 
-def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=3000, subsample_rate = 25,normalize=True):
+def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=3000, subsample_rate = 20,normalize=True):
 
     tau_dt = int(tau/dt)
     washout = max(tau_dt, 5000)
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     functions = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     # functions = [mackey_glass, henon_attractor]
     for func in functions:
-        results = func()
+        results = func(total_time=20)
         if func.__name__ == "henon_attractor":
             plt.plot(results[:, 0], results[:, 1], 'o', markersize=1)
         else:

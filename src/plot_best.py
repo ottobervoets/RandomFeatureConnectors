@@ -31,6 +31,7 @@ def extract_lowest_nrmse_parameters(csv_file):
 
 def predict_choatic_systems(test_length=84, **best_params):
 
+    # pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     # add training pattern to params.
     best_params['training_patterns'] = {}
@@ -94,11 +95,11 @@ def plot_predictions(data, save_fig=False, save_path=None):
         else:
             ax.plot(true_x, true_y, label='True', color='blue', linestyle='-', marker='o', linewidth = 0.5, markersize=1)
             ax.plot(predict_x, predict_y, label='Predicted', color='orange', linestyle='-', marker='o', linewidth = 0.5, markersize=1)
-
+        ax.plot(predict_x[0], predict_y[0], marker='o', color='Green')
         # Titles and annotations
         ax.set_title(name)
         ax.legend()
-        ax.text(0.5, -0.1, f"NRMSE: {nrmse:.4f}", ha='center', transform=ax.transAxes, fontsize=10)
+        ax.text(0.5, -0.1, f"NRMSE: {nrmse:.5f}", ha='center', transform=ax.transAxes, fontsize=10)
 
     plt.tight_layout()
 
@@ -117,11 +118,12 @@ if __name__ == "__main__":
 
     best_params = default_parmas_chaotic
     best_params['verbose'] = True
+    best_params['rfc_type'] = 'PCARFC'
     print(best_params)
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
-    results = predict_choatic_systems(test_length=84, **best_params)
+    results = predict_choatic_systems(test_length=1_000_000, **best_params)
 
     plot_predictions(results)
 

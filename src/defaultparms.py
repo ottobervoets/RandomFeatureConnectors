@@ -8,8 +8,8 @@ default_parms = {
     'beta_D': 0.01,
     'aperture': 8,
     'spectral_radius': 1.4,
-    'N': 100,
-    'M': 500,
+    'N': 500,
+    'M': 2500,
     'n_adapt': 2000,
     'W_sr': 1.5,
     'W_sparseness': 0.1,
@@ -24,20 +24,19 @@ default_parms = {
 }
 
 default_parmas_chaotic = {
-    'n_harvest': 2000,
+    'n_harvest': 3000,
     'washout': 500,
-    'beta_W_out': 5,
-    'beta_G': 0.1,
-    'beta_D': 0.07,
-    'aperture_rossler_attractor': 7000,
-    'aperture_lorenz_attractor': 1000,
+    'beta_W_out': 0.05,
+    'beta_G': 0.5,
+    'beta_D': 0.0001,
+    'aperture_rossler_attractor': 60,
+    'aperture_lorenz_attractor': 30,
     'aperture_mackey_glass': 150,
     'aperture_henon_attractor': 20,
-    'spectral_radius': 1.4,
-    'N': 500,
+    'spectral_radius': 1.1,
+    'N': 200,
     'M': 1000,
-    'n_adapt': 2000,
-    'W_sr': 0.5,
+    'n_adapt': 3000,
     'W_sparseness': 0.1,
     'd_dim': "reservoir_dim",
     'F_method': "patterns",
@@ -47,7 +46,8 @@ default_parmas_chaotic = {
     'noise_std': 0.001,
     'rfc_type': 'PCARFC',
     'max_n_features': 750,
-    'verbose': False
+    'verbose': False,
+    'W_in_std': 1.5,
 
 }
 

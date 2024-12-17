@@ -166,7 +166,7 @@ class BaseRFC:
             mean_z_squared = np.mean(collected_z ** 2, axis=0)
             conceptor_weights = mean_z_squared / (mean_z_squared + float(aperture) ** -2)
             self.c[name] = conceptor_weights
-            self.last_training_z_state[name] = self.z.copy()
+            # self.last_training_z_state[name] = self.z.copy()
         if self.verbose:
             print("conceptors constructed", np.shape(self.c))
 
@@ -184,6 +184,9 @@ class BaseRFC:
             self.one_step_driving(pattern[t], pattern_name=pattern_name)
             record_r.append(self.r)
             record_p.append(np.atleast_1d(pattern[t]))
+        if pattern_name not in self.last_training_z_state.keys():
+            print("added last training state to last_training_state")
+            self.last_training_z_state[pattern_name] = self.z
         return record_r, record_z, record_p
 
     def compute_W_out_ridge(self, r_recordings, patterns, beta_W_out):
@@ -241,6 +244,10 @@ class BaseRFC:
         p_recordings = []
 
         self.construct_c(training_patterns, washout, n_harvest, **kwargs)
+        if noise_std is not None:
+            for key in training_patterns:
+                noise = self.rng.normal(0, 0.01, (len(training_patterns[key]), self.signal_dim))
+                training_patterns[key] = training_patterns[key] + noise
 
         for name, training_pattern in training_patterns.items():
             record_r, record_z, record_p = self.record_r_z(pattern=training_pattern,
