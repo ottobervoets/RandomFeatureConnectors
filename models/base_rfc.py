@@ -232,9 +232,7 @@ class BaseRFC:
         ridge.fit(X, y)
         G_optimized = ridge.coef_
         if self.verbose:
-            print(f"Mean absolute size of G {np.linalg.norm
-            (G_optimized):.2f} which was {np.linalg.norm(self.G):.2f}, so a decrease"
-                  f" of {(np.linalg.norm(self.G) - np.linalg.norm(G_optimized)) / np.linalg.norm(self.G):.2f}")
+            print(f"Mean absolute size of G {np.linalg.norm(G_optimized):.2f} which was {np.linalg.norm(self.G):.2f}, so a decrease of {(np.linalg.norm(self.G) - np.linalg.norm(G_optimized)) / np.linalg.norm(self.G):.2f}")
         return G_optimized
 
     def store_patterns(self, training_patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
