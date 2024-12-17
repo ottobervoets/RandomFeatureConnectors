@@ -145,7 +145,7 @@ if __name__ == "__main__":
     functions = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     # functions = [mackey_glass, henon_attractor]
     for func in functions:
-        results = func(total_time=20)
+        results = func(total_time=40)
         if func.__name__ == "henon_attractor":
             plt.plot(results[:, 0], results[:, 1], 'o', markersize=1)
         else:

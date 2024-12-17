@@ -242,9 +242,10 @@ class BaseRFC:
         z_recordings = []
         r_recordings = []
         p_recordings = []
-
+        print("signal_noise", signal_noise)
         self.construct_c(training_patterns, washout, n_harvest, **kwargs)
         if signal_noise is not None:
+            print("######################Aff NOISE")
             for key in training_patterns:
                 noise = self.rng.normal(0, signal_noise, (len(training_patterns[key]), self.signal_dim))
                 training_patterns[key] = training_patterns[key] + noise

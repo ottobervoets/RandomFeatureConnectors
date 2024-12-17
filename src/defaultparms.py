@@ -44,7 +44,7 @@ default_parmas_chaotic = {
     'G_method': "W_F",
     'noise_mean': None,
     'noise_std': 0.001,
-    'signal_noise:': 0.01,
+    'signal_noise' : 0.01,
     'rfc_type': 'PCARFC',
     'max_n_features': 750,
     'verbose': False,

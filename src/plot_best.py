@@ -118,12 +118,12 @@ if __name__ == "__main__":
 
     best_params = default_parmas_chaotic
     best_params['verbose'] = True
-    best_params['rfc_type'] = 'PCARFC'
+    best_params['rfc_type'] = 'base'
     print(best_params)
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
-    results = predict_choatic_systems(test_length=10_000, **best_params)
+    results = predict_choatic_systems(test_length=84, **best_params)
 
     plot_predictions(results)
 
