@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/Users/ottobervoets/Documents/24/Thesis/RandomFeatureConnectors')
+sys.path.append('/home3/s3417522/RandomFeatureConnectors')
 from src.support_functions import *
 
 import numpy as np

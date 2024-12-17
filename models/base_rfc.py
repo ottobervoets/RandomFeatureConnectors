@@ -127,6 +127,8 @@ class BaseRFC:
         recording_y = []
 
         for t in range(length):
+            if t%1000 == 0 and self.verbose:
+                print(t)
             self.one_step_hallucinating(pattern_name)
             if record_internal:
                 recording_internal.append(self.r)
@@ -236,7 +238,7 @@ class BaseRFC:
         return G_optimized
 
     def store_patterns(self, training_patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
-                       noise_std=None, **kwargs):
+                       noise_std=None, signal_noise: float = None, **kwargs):
         self.training_patterns = training_patterns
 
         z_recordings = []
@@ -244,9 +246,9 @@ class BaseRFC:
         p_recordings = []
 
         self.construct_c(training_patterns, washout, n_harvest, **kwargs)
-        if noise_std is not None:
+        if signal_noise is not None:
             for key in training_patterns:
-                noise = self.rng.normal(0, 0.01, (len(training_patterns[key]), self.signal_dim))
+                noise = self.rng.normal(0, signal_noise, (len(training_patterns[key]), self.signal_dim))
                 training_patterns[key] = training_patterns[key] + noise
 
         for name, training_pattern in training_patterns.items():

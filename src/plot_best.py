@@ -123,7 +123,7 @@ if __name__ == "__main__":
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
-    results = predict_choatic_systems(test_length=1_000_000, **best_params)
+    results = predict_choatic_systems(test_length=10_000, **best_params)
 
     plot_predictions(results)
 

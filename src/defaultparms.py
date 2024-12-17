@@ -44,6 +44,7 @@ default_parmas_chaotic = {
     'G_method': "W_F",
     'noise_mean': None,
     'noise_std': 0.001,
+    'signal_noise:': 0.01,
     'rfc_type': 'PCARFC',
     'max_n_features': 750,
     'verbose': False,
@@ -54,7 +55,12 @@ default_parmas_chaotic = {
 parameters_to_optimize = {  # idea for optmization.
     'noise_std': {
         'step_type': 'relative',
-        'step_size': 0.50,
+        'step_size': 0.10,
+        'boundaries': [0, 0.5]
+    },
+    'signal_noise': {
+        'step_type': 'relative',
+        'step_size': 0.10,
         'boundaries': [0, 0.5]
     },
     'beta_G': {
