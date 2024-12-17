@@ -1,43 +1,51 @@
-TODO:
-
-DONE: File that makes it easy to do sinus etc. with plot
-DONE: Baseclass/extended class
-DONE: Factory function
-DONE -> question: All signal generators
-Optimizer
-Experiments + logging
-
-
-Config
+? if adding noise to the reservoir state, the starting "location" is also disturbed a bit. do we want to correct for this?
 
 
 
+? conceptors to prune
 
-Base class
-- re compute everything, compute c_i's?
-- random F and G
-- Store last z state
--
+?no defintion of quota, but sum of eigenvalues and then compared with dimention of the reservoir
 
+? how to interpert the storage capacity
 
 
 
-
-Gestructureerde experimenten
-experiments aanpassen
-stapsgewijs optimaliseren
+==============
+settings for rossler
 
 
+n_harvest = 2000
+    washout = 500
+    beta_W_out = 5
+    beta_G = 0.1
+    beta_D = 0.07
+    aperture = 300
+    spectral_radius = 0.8
+    N = 500
+    M = 250
+    n_adapt = 2000
+    W_sr = 0.5
+    W_sparseness = 0.2
+    d_dim = "reservoir_dim"
+    F_method = "white_noise"  # random, white_noise, patter
+    G_method = "W_F"  # random, F, W_F, W_G_tilde
 
-1) Generate the maps
+    patterns = {}
+    patterns["rossler_attractor"] = rossler_attractor(total_time=3000)
+    # patterns["lorenz_attractor"] = lorenz_attractor(total_time=3000)
+    # patterns["mackey_glass"] = mackey_glass(total_time=3000)
+    # patterns["henon_attractor"] = henon_attractor(total_time=3000)
+    kwargs = {}
+    kwargs["aperture_rossler_attractor"] = 700
+    kwargs["aperture_lorenz_attractor"] = 1000
+    kwargs["aperture_mackey_glass"] = 150
+    kwargs["aperture_henon_attractor"] = 20
 
-2) store conceptors
+    kwargs['training_patterns'] = patterns
+    kwargs['noise_std'] = 0.1 #default = 0.001
+    kwargs['max_n_features'] = N
+    kwargs['washout'] = washout
+    kwargs['n_adapt'] = n_adapt
 
-3) recalculate the maps.
 
-
-How to measure if it is able to store extra pattern?
-
-Adding extra dimention and rest two zero would atleast work as well.
-In other case, just base the mappings on a subset of the patterns.
-In each case step 1 can be done with only a subset, and the other 2 steps with the remaining part.
+==========

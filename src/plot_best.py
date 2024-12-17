@@ -35,14 +35,13 @@ def predict_choatic_systems(test_length=84, **best_params):
     # add training pattern to params.
     best_params['training_patterns'] = {}
     best_params['apperture'] = {}
-    true_patterns = {} #todo make dict, just like the starting values.
+    true_patterns = {}
     training_length = best_params['n_adapt'] + best_params['washout']
     total_pattern = {}
     for pattern_generator in pattern_generators:
         total_pattern[pattern_generator.__name__] = pattern_generator(total_time=training_length + test_length)
         best_params['training_patterns'][pattern_generator.__name__] = total_pattern[pattern_generator.__name__][0:training_length]
         true_patterns[pattern_generator.__name__] = total_pattern[pattern_generator.__name__][training_length:(training_length+test_length)]
-        best_params['apperture'][pattern_generator.__name__] = 150
     rfc = create_RFC(**best_params)
     # print(rfc.training_patterns, "after construction")
     rfc.store_patterns(**best_params)
@@ -112,12 +111,13 @@ def plot_predictions(data, save_fig=False, save_path=None):
 
 
 if __name__ == "__main__":
-    path = "../res/"+"2024-11-27 09:33:19.csv"
-    best_params = extract_lowest_nrmse_parameters(path)
+    path = "../res/"+"2024-11-27 23:38:57.csv"
+    # best_params = extract_lowest_nrmse_parameters(path)
     # best_params['']
 
     best_params = default_parmas_chaotic
     best_params['verbose'] = True
+    print(best_params)
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")

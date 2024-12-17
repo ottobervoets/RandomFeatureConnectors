@@ -26,18 +26,18 @@ default_parms = {
 default_parmas_chaotic = {
     'n_harvest': 2000,
     'washout': 500,
-    'beta_W_out': 0.01,
-    'beta_G': 1,
-    'beta_D': 0.01,
-    'aperture_rossler_attractor': 1000,
- 'aperture_lorenz_attractor': 400,
- 'aperture_mackey_glass': 1300,
- 'aperture_henon_attractor': 630,
+    'beta_W_out': 5,
+    'beta_G': 0.1,
+    'beta_D': 0.07,
+    'aperture_rossler_attractor': 7000,
+    'aperture_lorenz_attractor': 1000,
+    'aperture_mackey_glass': 150,
+    'aperture_henon_attractor': 20,
     'spectral_radius': 1.4,
     'N': 500,
-    'M': 2500,
+    'M': 1000,
     'n_adapt': 2000,
-    'W_sr': 1.4,
+    'W_sr': 0.5,
     'W_sparseness': 0.1,
     'd_dim': "reservoir_dim",
     'F_method': "patterns",
@@ -46,7 +46,7 @@ default_parmas_chaotic = {
     'noise_mean': None,
     'noise_std': 0.001,
     'rfc_type': 'PCARFC',
-    'max_n_features': 500,
+    'max_n_features': 750,
     'verbose': False
 
 }
@@ -92,13 +92,18 @@ parameters_to_optimize = {  # idea for optmization.
         'step_size': 0.25,
         'boundaries': [0, 10]
     },
+    'spectral_radius': {
+        'step_type': 'absolute',
+        'step_size': 0.1,
+        'boundaries': [0, 2]
+    },
 }
 
 
 optimization_settings = {
     'experiment_name': "../res/" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".csv",
-    'cycles': 2,
-    'n_rep': 1
+    'cycles': 3,
+    'n_rep': 2
 }
 '''
     'beta_W_out': 0.01,
@@ -106,8 +111,8 @@ optimization_settings = {
     'beta_D': 0.01,
     'aperture': 8,
 '''
-parameters_to_optimzie = ["beta_G",
-                          "aperture",
-                          "beta_W_out",
-                          "max_n_features",
-                          "beta_D"]
+# parameters_to_optimzie = ["beta_G",
+#                           "aperture",
+#                           "beta_W_out",
+#                           "max_n_features",
+#                           "beta_D"]

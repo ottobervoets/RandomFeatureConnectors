@@ -1,6 +1,6 @@
 import numpy as np
 
-from legacy.base_rfc import BaseRFC
+from models.base_rfc import BaseRFC
 
 
 class RandomGRFC(BaseRFC):

@@ -40,7 +40,7 @@ def rossler_attractor(total_time=1000, a=0.2, b=0.2, c=8.0, dt=1 / 200, subsampl
     return scaled_trajectory
 
 
-def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=15, sigma=10, r=28, b=8/3):
+def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=20, sigma=10, r=28, b=8/3):
     """
     Generate a normalized Lorenz attractor trajectory with specified length and parameters.
 
@@ -85,7 +85,7 @@ def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=15, sigma=
     # print(len(scaled_trajectory))
     return scaled_trajectory
 
-def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=2500, subsample_rate = 10,normalize=True):
+def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=3000, subsample_rate = 25,normalize=True):
 
     tau_dt = int(tau/dt)
     washout = max(tau_dt, 5000)

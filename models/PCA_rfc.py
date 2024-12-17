@@ -11,7 +11,7 @@ class PCARFC(BaseRFC):
         washout = kwargs.get("washout")
         n_adapt = kwargs.get("n_adapt")
         max_n_components = kwargs.get("max_n_features")
-        if len(patterns) * max_n_components > self.M:
+        if len(patterns.keys()) * max_n_components > self.M:
             UserWarning("M is to low to accomodate the desired number of components")
             max_n_components = int(np.floor(self.M/len(patterns)))
         F = []
@@ -35,7 +35,7 @@ class PCARFC(BaseRFC):
 
         F.extend(PCARFC.sample_unit_vectors(self.M-len(F), self.N).tolist())
         F = np.array(F)
-        print(F.shape)
+        # print(F.shape)
         return F.T
     @staticmethod
     def sample_unit_vectors(n_rand, dimension):
@@ -48,7 +48,7 @@ class PCARFC(BaseRFC):
 
         # Step 3: Normalize the vectors to have unit norm
         unit_vectors = random_vectors / norms
-        print(np.shape(unit_vectors), "unti vectors")
+        # print(np.shape(unit_vectors), "unti vectors")
 
         return unit_vectors
 

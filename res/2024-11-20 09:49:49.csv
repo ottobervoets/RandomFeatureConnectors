@@ -1,4 +1,0 @@
-n_harvest,washout,learning_rate_c,beta_W_out,beta_G,beta_D,aperture,spectral_radius,N,M,n_adapt,W_sr,W_sparseness,d_dim,F_method,signal_dim,G_method,noise_mean,noise_std,nrmse
-400,500,0.5,0.01,1,0.01,8,1.4,100,500,2000,0.75,0.1,reservoir_dim,white_noise,2,W_F,0,,[0.0028114]
-400,500,0.5,0.01,1,0.01,8,1.4,100,500,2000,1.125,0.1,reservoir_dim,white_noise,2,W_F,0,,[0.0029794]
-400,500,0.5,0.01,1,0.01,8,1.4,100,500,2000,0.5625,0.1,reservoir_dim,white_noise,2,W_F,0,,[0.00310728]

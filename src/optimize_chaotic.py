@@ -1,8 +1,10 @@
+import sys
+sys.path.append('/Users/ottobervoets/Documents/24/Thesis/RandomFeatureConnectors')
 from src.support_functions import *
 
 import numpy as np
 import csv
-from src.defaultparms import default_parmas_chaotic, parameters_to_optimize, optimization_settings
+from defaultparms import default_parmas_chaotic, parameters_to_optimize, optimization_settings
 from datetime import datetime
 from models.factory import create_RFC
 from signal_generators import rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor
@@ -33,6 +35,7 @@ def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int =
 
 
 def n_experiments_chaotic(n_rep, rfc_type, test_length=84, **kwargs):
+    print(f"Do experiment")
     results = []
 
     pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
@@ -83,15 +86,20 @@ def do_and_write_experiment(settings, **params):
     #     print(e)
     #     return
     write_experiment_results(params, settings['experiment_name'])
+    return params
 
 def go_one_driection(current_param, info_dict, params, direction, settings):
-    old_nrmse = params['nrmse']
-    while old_nrmse <= params['nrmse']:
+    while True:
+        print(f"taking a step {direction}, for parameter {current_param} at value {params[current_param]}, nrmse = {params['nrmse']}")
         params[current_param] = parameter_step(params[current_param], info_dict, direction)
-        if params[current_param] < info_dict['boundaries'][0] or params[current_param] > info_dict['boundaries'][0]:
+        if params[current_param] < info_dict['boundaries'][0] or params[current_param] > info_dict['boundaries'][1]:
             print(f"Parameter {current_param} is over the boundary with value {params[current_param]}")
             break
-        do_and_write_experiment(params, settings)
+        temp = do_and_write_experiment(settings, **params)
+        if temp['nrmse'] > params['nrmse']:
+            break
+        params = temp
+    return params
 
 
 
@@ -109,7 +117,10 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     print(f"Optimizing with the following settings {settings}")
     for _ in range(settings['cycles']):
         for current_parameter, info_dict in parameters_to_optimize.items():
+            print("##################", current_parameter)
             optimized_params['nrmse'] = n_experiments_chaotic(**optimized_params)
+            print(f"NRSME {optimized_params['nrmse']}, for parameter {current_parameter} "
+                  f"at value {optimized_params[current_parameter]}")
             left_params = optimized_params.copy()
             right_params = optimized_params.copy()
             left_params['nrmse'] = 0
@@ -122,20 +133,25 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
                                           info_dict=info_dict,
                                           direction='right')
 
-            do_and_write_experiment(settings, **right_params)
-            do_and_write_experiment(settings, **left_params)
-            if right_params['nrmse'] > left_params['nrmse']:
+            right_params = do_and_write_experiment(settings, **right_params)
+            left_params = do_and_write_experiment(settings, **left_params)
+            direction = None
+            if left_params['nrmse'] < optimized_params['nrmse']:
                 direction = "left"
-            else:
+            elif right_params['nrmse'] < optimized_params['nrmse']:
                 direction = "right"
                 # go left
-            go_one_driection(params=left_params,
+            else:
+                print(f"No direction, parameter {current_parameter} is already optimal at value "
+                      f"{optimized_params[current_parameter]} and nrmse = {optimized_params['nrmse']}")
+                continue
+            optimized_params = go_one_driection(params=left_params,
                              info_dict=info_dict,
                              current_param=current_parameter,
                              direction=direction,
                              settings=settings)
             print(
-                f"Optimizing parameter {current_parameter}, best value now is{optimized_params[current_parameter]}" +
+                f"Otimized parameter {current_parameter}, best value now is{optimized_params[current_parameter]}" +
                 f"current NRMSE = {optimized_params['nrmse']}")
 
 
@@ -152,7 +168,8 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
-    default_parmas_chaotic['rfc_type'] = 'PCARFC'
+    default_parmas_chaotic['rfc_type'] = 'base'
+    print(parameters_to_optimize.keys())
     optimize_parameters_chaotic(parameters_to_optimize=parameters_to_optimize, default_parms=default_parmas_chaotic,
                                 optimization_settings=optimization_settings)
 
