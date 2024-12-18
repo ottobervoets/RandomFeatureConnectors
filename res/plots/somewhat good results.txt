@@ -26,3 +26,5 @@ default_parmas_chaotic = {
 
 }
 
+for best_results_pca_last_csv the settings are
+{'n_harvest': np.int64(3000), 'washout': np.int64(500), 'beta_W_out': np.float64(0.0066741943359375), 'beta_G': np.float64(0.43663455), 'beta_D': np.float64(3.7078857421875e-05), 'aperture_rossler_attractor': np.float64(48.114), 'aperture_lorenz_attractor': np.float64(23.81643), 'aperture_mackey_glass': np.float64(121.5), 'aperture_henon_attractor': np.float64(16.2), 'spectral_radius': np.float64(1.0), 'N': np.int64(200), 'M': np.int64(1000), 'n_adapt': np.int64(3000), 'W_sparseness': np.float64(0.1), 'd_dim': 'reservoir_dim', 'F_method': 'patterns', 'signal_dim': np.int64(2), 'G_method': 'W_F', 'noise_mean': None, 'noise_std': np.float64(0.0007144928999999), 'signal_noise': np.float64(0.0070027449129), 'rfc_type': 'PCARFC', 'max_n_features': np.int64(750), 'verbose': True, 'W_in_std': np.float64(1.5), 'experiment_name': '../res/2024-12-17 15:42:25.csv', 'cycles': np.int64(2), 'n_rep': np.int64(1)}

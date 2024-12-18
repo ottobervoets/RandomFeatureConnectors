@@ -110,7 +110,7 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     default_settings = {
         'experiment_name': "../res/" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".csv",
         'cycles': 2,
-        'n_rep': 1
+        'n_rep': 3
     }
     optimized_params = {**optimized_params, **default_settings}
     settings = {**default_settings, **optimization_settings}

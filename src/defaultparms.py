@@ -26,16 +26,16 @@ default_parms = {
 default_parmas_chaotic = {
     'n_harvest': 3000,
     'washout': 500,
-    'beta_W_out': 0.05,
-    'beta_G': 0.5,
-    'beta_D': 0.0001,
-    'aperture_rossler_attractor': 60,
-    'aperture_lorenz_attractor': 30,
-    'aperture_mackey_glass': 150,
-    'aperture_henon_attractor': 20,
+    'beta_W_out': 0.02,
+    'beta_G': 0.4,
+    'beta_D': (6*(10**-5)),
+    'aperture_rossler_attractor': 48,
+    'aperture_lorenz_attractor': 28,
+    'aperture_mackey_glass': 130,
+    'aperture_henon_attractor': 18,
     'spectral_radius': 1.1,
-    'N': 200,
-    'M': 1000,
+    'N': 300,
+    'M': 1200,
     'n_adapt': 3000,
     'W_sparseness': 0.1,
     'd_dim': "reservoir_dim",
@@ -43,12 +43,13 @@ default_parmas_chaotic = {
     'signal_dim': 2,
     'G_method': "W_F",
     'noise_mean': None,
-    'noise_std': 0.001,
-    'signal_noise' : 0.01,
+    'noise_std': 0.0005,
+    'signal_noise' : 0.007,
     'rfc_type': 'PCARFC',
     'max_n_features': 750,
     'verbose': False,
     'W_in_std': 1.5,
+    'W_sr': 1.2
 
 }
 
@@ -101,6 +102,16 @@ parameters_to_optimize = {  # idea for optmization.
     'spectral_radius': {
         'step_type': 'absolute',
         'step_size': 0.1,
+        'boundaries': [0, 2]
+    },
+    'W_in_std': {
+        'step_type': 'absolute',
+        'step_size': 0.05,
+        'boundaries': [0, 2]
+    },
+    'W_sr': {
+        'step_type': 'absolute',
+        'step_size': 0.05,
         'boundaries': [0, 2]
     },
 }

@@ -57,4 +57,4 @@ def plot_scrollable_table(df, title="Scrollable Table"):
     fig.show()
 
 
-process_and_plot_csv('../res/'+'2024-11-27 09:33:19.csv')
+process_and_plot_csv('../res/'+'2024-12-17 15_42_25.csv')

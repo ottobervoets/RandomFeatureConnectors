@@ -112,19 +112,23 @@ def plot_predictions(data, save_fig=False, save_path=None):
 
 
 if __name__ == "__main__":
-    path = "../res/"+"2024-11-27 23:38:57.csv"
+    # path = "../res/"+"2024-12-17 15_42_51.csv"
+    # path = "../res/" + "2024-12-17 15_42_25.csv"
     # best_params = extract_lowest_nrmse_parameters(path)
-    # best_params['']
+
 
     best_params = default_parmas_chaotic
     best_params['verbose'] = True
-    best_params['rfc_type'] = 'base'
+    best_params['M'] = 400
+    # best_params['rfc_type'] = 'PCARFC'
+
+
     print(best_params)
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
     results = predict_choatic_systems(test_length=84, **best_params)
-
+    print(best_params['rfc_type'])
     plot_predictions(results)
 
 
