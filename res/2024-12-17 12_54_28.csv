@@ -1,0 +1,8 @@
+n_harvest,washout,beta_W_out,beta_G,beta_D,aperture_rossler_attractor,aperture_lorenz_attractor,aperture_mackey_glass,aperture_henon_attractor,spectral_radius,N,M,n_adapt,W_sr,W_sparseness,d_dim,F_method,signal_dim,G_method,noise_mean,noise_std,rfc_type,max_n_features,verbose,experiment_name,cycles,n_rep,nrmse
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.0015,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.0015625017885742094
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.0005,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.003912846014501492
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.00075,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.01039376632958549
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.0011250000000000001,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.014860978216378948
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.000375,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.012415894183089275
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.0011250000000000001,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.005483646222535194
+2000,500,5,0.1,0.07,7000,1000,150,20,0.8,100,100,2000,0.5,0.1,reservoir_dim,patterns,2,W_F,,0.000375,base,750,False,../res/2024-12-17 12:54:29.csv,2,1,0.004952347377276789

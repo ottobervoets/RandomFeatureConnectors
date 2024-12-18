@@ -1,0 +1,3 @@
+n_harvest,washout,beta_W_out,beta_G,beta_D,aperture_rossler_attractor,aperture_lorenz_attractor,aperture_mackey_glass,aperture_henon_attractor,spectral_radius,N,M,n_adapt,W_sparseness,d_dim,F_method,signal_dim,G_method,noise_mean,noise_std,signal_noise:,rfc_type,max_n_features,verbose,W_in_std,experiment_name,cycles,n_rep,nrmse
+3000,500,0.05,0.5,0.0001,60,30,150,20,1.1,200,1000,3000,0.1,reservoir_dim,patterns,2,W_F,,0.0011,0.01,PCARFC,750,False,1.5,../res/2024-12-17 15:23:53.csv,2,1,0.011264758441587674
+3000,500,0.05,0.5,0.0001,60,30,150,20,1.1,200,1000,3000,0.1,reservoir_dim,patterns,2,W_F,,0.0009,0.01,PCARFC,750,False,1.5,../res/2024-12-17 15:23:53.csv,2,1,0.012723622507460362
