@@ -8,6 +8,28 @@
 
 ? how to interpert the storage capacity
 
+TODO:
+- Optimize for different settings.
+- Run optimized settings n times.
+- Update github + spheer mailen
+- Implement visualization for the conceptor weights/weight
+
+
+Reservoir size:
+N = 100, M = 500 already gives consistently good results for optimized settings. Since apperture (CHECK) takes more storage we do this reservoir size times 2.5, leading to a size of 250. Note that a reservoir of 50 also already performs reasonably well, however, there is more "tracking".
+
+N = 250
+
+M = 100 => bad results
+M = 125 => 1/2 * N
+M = 187 => 3/4 * N
+M = 250 => N
+M = 312 => 5/4 N
+M = 375 => 3/2 N
+M = 500 => 2N
+M = 750 => 3N
+M = 1000 => 4N
+M = 1250 => 5N
 
 
 ==============

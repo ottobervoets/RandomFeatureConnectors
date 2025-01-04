@@ -90,8 +90,8 @@ def plot_predictions(data, save_fig=False, save_path=None):
 
         # Plotting the data
         if name == "henon_attractor":
-            ax.scatter(true_x, true_y, label='True', color='blue', s=10)
-            ax.scatter(predict_x, predict_y, label='Predicted', color='orange', s=10)
+            ax.scatter(true_x, true_y, label='True', color='blue', s=1)
+            ax.scatter(predict_x, predict_y, label='Predicted', color='orange', s=1)
         else:
             ax.plot(true_x, true_y, label='True', color='blue', linestyle='-', marker='o', linewidth = 0.5, markersize=1)
             ax.plot(predict_x, predict_y, label='Predicted', color='orange', linestyle='-', marker='o', linewidth = 0.5, markersize=1)
@@ -112,14 +112,18 @@ def plot_predictions(data, save_fig=False, save_path=None):
 
 
 if __name__ == "__main__":
-    # path = "../res/"+"2024-12-17 15_42_51.csv"
-    # path = "../res/" + "2024-12-17 15_42_25.csv"
-    # best_params = extract_lowest_nrmse_parameters(path)
+    # path = "../res/"+"2024-12-18 11_06_50.csv" #base
+    path = "../res/" + "2024-12-18 11_07_04.csv" #pca
+    # path = "../res/" + "2024-12-18 11_03_39.csv"  # pca bigger
+    # path = "../res/" + "2024-12-18 11_04_17.csv"  # base bigger
+    best_params = extract_lowest_nrmse_parameters(path)
 
 
-    best_params = default_parmas_chaotic
+    # best_params = default_parmas_chaotic
     best_params['verbose'] = True
-    best_params['M'] = 400
+    # best_params['M'] = 1000
+    best_params['N'] = 150
+    # best_params['aperture_mackey_glass'] = 10
     # best_params['rfc_type'] = 'PCARFC'
 
 
@@ -127,7 +131,7 @@ if __name__ == "__main__":
     # best_params['rfc_type'] = 'base'
 
     # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
-    results = predict_choatic_systems(test_length=84, **best_params)
+    results = predict_choatic_systems(test_length=5_000, **best_params)
     print(best_params['rfc_type'])
     plot_predictions(results)
 

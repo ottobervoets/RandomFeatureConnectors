@@ -9,7 +9,7 @@ class PCARFC(BaseRFC):
         patterns = kwargs.get("training_patterns")
         washout = kwargs.get("washout")
         n_adapt = kwargs.get("n_adapt")
-        max_n_components = kwargs.get("max_n_features")
+        max_n_components = int(kwargs.get("max_n_features"))
         if len(patterns.keys()) * max_n_components > self.M:
             UserWarning("M is to low to accomodate the desired number of components")
             max_n_components = int(np.floor(self.M/len(patterns)))

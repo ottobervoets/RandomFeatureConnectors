@@ -31,7 +31,7 @@ default_parmas_chaotic = {
     'beta_D': (6*(10**-5)),
     'aperture_rossler_attractor': 48,
     'aperture_lorenz_attractor': 28,
-    'aperture_mackey_glass': 130,
+    'aperture_mackey_glass': 30,
     'aperture_henon_attractor': 18,
     'spectral_radius': 1.1,
     'N': 300,
@@ -69,6 +69,13 @@ parameters_to_optimize = {  # idea for optmization.
         'step_size': 0.1,
         'boundaries': [0, 10]
     },
+
+    'max_n_features': {
+        'step_type': 'relative',
+        'step_size': 0.1,
+        'boundaries': [0, 10]
+    },
+
     'aperture_rossler_attractor': {
         'step_type': 'relative',
         'step_size': 0.1,
