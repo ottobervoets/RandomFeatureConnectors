@@ -109,8 +109,8 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
 
     default_settings = {
         'experiment_name': "../res/" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".csv",
-        'cycles': 1,
-        'n_rep': 1
+        'cycles': 2,
+        'n_rep': 3
     }
     optimized_params = {**optimized_params, **default_settings}
     settings = {**default_settings, **optimization_settings}
@@ -168,6 +168,10 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
+    arg_v = sys.argv[1]
+    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000, 1250]
+    default_parmas_chaotic['M'] = M_settings[arg_v]
+    default_parmas_chaotic['N'] = 250
     default_parmas_chaotic['rfc_type'] = 'PCARFC'
     default_parmas_chaotic['max_n_features'] = np.min([default_parmas_chaotic['N'], default_parmas_chaotic['N']])
     print(parameters_to_optimize.keys())
