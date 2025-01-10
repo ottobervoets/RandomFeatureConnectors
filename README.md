@@ -1,3 +1,3 @@
 # RandomFeatureConnectors
 
-Python 3.12
+Work in progress, master thesis project. 
