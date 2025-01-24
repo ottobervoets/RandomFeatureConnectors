@@ -20,7 +20,9 @@ def process_and_plot_csv(file_path):
     # )
 
     # Sort the dataframes by mean_sinus and mean_discrete
+    df = df[df['M'] == 1000]
     df_sorted = df.sort_values(by='nrmse')
+
 
     # Plot the sorted dataframes in a scrollable format
     plot_scrollable_table(df_sorted, title="DataFrame sorted by mean_nrmse")
@@ -57,4 +59,4 @@ def plot_scrollable_table(df, title="Scrollable Table"):
     fig.show()
 
 
-process_and_plot_csv('../res/'+'2024-12-18 11_04_17.csv')
+process_and_plot_csv("../res/optimize_different_M_2/" + "2025-01-06 16_26_39.csv")

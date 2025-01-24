@@ -33,7 +33,43 @@ M = 1250 => 5N
 
 
 ==============
-settings for rossler
+Uitzoeken waarom er sommige jobs niet gefinished zijn.
+Iets maken dat de beste settings straks gerund kunnen worden en resultaten gereport.
+platjes alvast opslaan
+
+
+====
+Verloop van variabelen over verschillende M. ipv scatter plot per variabele
+
+=====
+Stability: Max noise added to network (steps of x5)
+
+
+-Optimize also with beta
+
+====
+noise toevoegen
+
+M = 1000 0.01
+M = 750 0.01
+M = 500 0.01
+M = 375 0.01
+M = 312 0.005
+M = 250 0.005
+M = 187 0.000001
+M = 125 => not stable
+M = 100 => not stable
+
+
+=====
+Questions:
+line 31: net connectivity 10/netsize => netsize of 500 implies 10/500 = 0.02 connectivity.
+line 69: xCollectorsCentered = cell(1,Np)
+line 95: 0.5*(u(1)+1)
+typo resevoir size and matrix sizes.
+
+Washout length increase
+
 
 
 n_harvest = 2000

@@ -1,0 +1,2 @@
+N,M,rfc_type,aperture_rossler_attractor,aperture_lorenz_attractor,aperture_mackey_glass,aperture_henon_attractor,n_adapt,washout,beta_W,beta_W_out,W_in_std,W_sr,noise_std,signal_noise,experiment_name,cycles,n_rep,nrmse
+500,1,matrix_conceptor,630.957344480193,398.1071705534973,1258.9254117941675,1000,1914,500,0.00011,0.01,1.2,0.8,0.0001,0.0005,../res/2025-01-23 14:10:55__500.csv,2,5,0.00336424536427707

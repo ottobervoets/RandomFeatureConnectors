@@ -4,10 +4,14 @@ from src.support_functions import *
 
 import numpy as np
 import csv
-from defaultparms import default_parmas_chaotic, parameters_to_optimize, optimization_settings
+from defaultparms import *
 from datetime import datetime
 from models.factory import create_RFC
 from signal_generators import rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor
+from matlab_copy.helper_functions import (rossler_attractor_2d,
+                                          mackey_glass_2d,
+                                          lorenz_attractor_2d,
+                                          henon_attractor_2d)
 
 
 def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int = 84, **kwargs):
@@ -24,7 +28,7 @@ def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int =
     rfc.store_patterns(**kwargs)
     nrmses = []
     for key, value in test_pattern.items():
-        result = rfc.record_chaotic(test_length, pattern_name=key)
+        result = rfc.record_chaotic(length=test_length, pattern_name=key)
         nmrse = NRMSE_2_dim(test_pattern[key],
                             result)
         # if nmrse > 0.5:
@@ -34,11 +38,18 @@ def one_experiment_chaotic(test_pattern: dict, rfc_type: str, test_length: int =
     return np.mean(nrmses), nrmses
 
 
-def n_experiments_chaotic(n_rep, rfc_type, test_length=84, **kwargs):
-    print(f"Do experiment")
+def n_experiments_chaotic(n_rep, rfc_type, test_length = 84, **kwargs):
+    print(f"do experiment repeat {n_rep} times")
     results = []
 
+    rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor = rossler_attractor_2d, lorenz_attractor_2d, mackey_glass_2d, henon_attractor_2d
+    #
     pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
+    # pattern_generators = [rossler_attractor_2d,  #these are those from herbert.
+    #                       lorenz_attractor_2d,
+    #                       mackey_glass_2d,
+    #                       henon_attractor_2d]
+    # pattern_generators = [rossler_attractor, mackey_glass, henon_attractor]
     # add training pattern to params.
     kwargs['training_patterns'] = {}
     kwargs['apperture'] = {}
@@ -53,9 +64,11 @@ def n_experiments_chaotic(n_rep, rfc_type, test_length=84, **kwargs):
                                                     training_length:(training_length + test_length)]
 
     for experiment in range(n_rep):
-        mean_nrmses, _ = one_experiment_chaotic(test_pattern=true_patterns,
-                                                rfc_type=rfc_type, test_length=test_length,
-                                                **kwargs)
+        mean_nrmses = float('Nan')
+        while(np.isnan(mean_nrmses)):
+            mean_nrmses, _ = one_experiment_chaotic(test_pattern=true_patterns,
+                                                    rfc_type=rfc_type, test_length=test_length,
+                                                    **kwargs)
         results.append(mean_nrmses)
     return np.mean(results)
 
@@ -108,12 +121,12 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     optimized_params = default_parms.copy()
 
     default_settings = {
-        'experiment_name': "../res/" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".csv",
-        'cycles': 2,
-        'n_rep': 3
+        'experiment_name': "../res/" + "RFC_VRIJDAG_" + f"_{optimized_params['N']}" + ".csv",
+        'cycles': 3,
+        'n_rep': 5
     }
     optimized_params = {**optimized_params, **default_settings}
-    settings = {**default_settings, **optimization_settings}
+    settings = default_settings
     print(f"Optimizing with the following settings {settings}")
     for _ in range(settings['cycles']):
         for current_parameter, info_dict in parameters_to_optimize.items():
@@ -168,12 +181,13 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
-    arg_v = sys.argv[1]
-    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000, 1250]
+    # arg_v = sys.argv[1]
+    arg_v = 1
+    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
     default_parmas_chaotic['M'] = M_settings[arg_v]
     default_parmas_chaotic['N'] = 250
     default_parmas_chaotic['rfc_type'] = 'PCARFC'
-    default_parmas_chaotic['max_n_features'] = np.min([default_parmas_chaotic['N'], default_parmas_chaotic['N']])
+    default_parmas_chaotic['max_n_features'] = np.min([default_parmas_chaotic['N'], default_parmas_chaotic['M']/4])
     print(parameters_to_optimize.keys())
     optimize_parameters_chaotic(parameters_to_optimize=parameters_to_optimize, default_parms=default_parmas_chaotic,
                                 optimization_settings=optimization_settings)

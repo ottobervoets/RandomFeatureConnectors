@@ -82,7 +82,7 @@ def lorenz_attractor(total_time=1000, step_size=1/200, subsample_rate=13, sigma=
     trajectory = np.array(trajectory[:total_time])  # Ensure exactly n samples
 
     scaled_trajectory = (trajectory - np.min(trajectory)) / (np.max(trajectory) - np.min(trajectory))
-    # print(len(scaled_trajectory))
+
     return scaled_trajectory
 
 def mackey_glass(beta=0.2, gamma=0.1, n=10, tau=17, dt=0.1, total_time=3000, subsample_rate = 15,normalize=True):

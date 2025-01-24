@@ -17,12 +17,14 @@ class BaseRFC:
                  reproducible: bool = False,
                  seed: int = 294369130659753536483103517623731383366,
                  verbose: bool = False,
+                 plot_conceptors: bool = False,
                  **kwargs: object) -> None:
         if reproducible:
             self.rng = np.random.default_rng(seed)
         else:
             self.rng = np.random.default_rng()
         self.verbose = verbose
+        self.bool_plt_c = plot_conceptors
         if (self.verbose):
             print("default constructor")
         self.N = N
@@ -98,7 +100,7 @@ class BaseRFC:
             if self.verbose:
                 print(f"set state to the last training state of {pattern_name}")
             return
-        self.z = np.zeros(self.M)
+        self.z = np.random.normal(size=self.M)
 
     def one_step_hallucinating(self, pattern_name=None):  # taken from page 113
         self.r = np.tanh(self.G @ self.z + self.D @ self.z + self.b)
@@ -127,8 +129,6 @@ class BaseRFC:
         recording_y = []
 
         for t in range(length):
-            if t%1000 == 0 and self.verbose:
-                print(t)
             self.one_step_hallucinating(pattern_name)
             if record_internal:
                 recording_internal.append(self.r)
@@ -136,10 +136,11 @@ class BaseRFC:
                 recording_y.append(self.W_out @ self.r)
         return recording_internal, recording_y
 
-    def construct_c(self, patterns, n_washout: int, n_harvest: int, matrix_conceptor: bool = True, **kwargs):
+    def construct_c(self, patterns, n_washout: int, n_harvest: int, matrix_conceptor: bool = False, **kwargs):
         for name, pattern in patterns.items():
-            aperture = kwargs.get("aperture_" + name)
-            print(name)
+            aperture = kwargs[f"aperture_{name}"]
+
+            # print(name)
             for t in range(n_washout):
                 self.one_step_driving(pattern[t], pattern_name=None)
             collected_z = np.zeros(shape=(n_harvest, self.M))
@@ -171,6 +172,9 @@ class BaseRFC:
             # self.last_training_z_state[name] = self.z.copy()
         if self.verbose:
             print("conceptors constructed", np.shape(self.c))
+        if self.bool_plt_c:
+            # print("here")
+            self.plot_conceptors()
 
     def record_r_z(self, pattern_name: str, n_washout: int, n_harvest: int, pattern, noise_std: float):
         record_r = []
@@ -187,7 +191,7 @@ class BaseRFC:
             record_r.append(self.r)
             record_p.append(np.atleast_1d(pattern[t]))
         if pattern_name not in self.last_training_z_state.keys():
-            print("added last training state to last_training_state")
+            # print("added last training state to last_training_state")
             self.last_training_z_state[pattern_name] = self.z
         return record_r, record_z, record_p
 
@@ -238,14 +242,17 @@ class BaseRFC:
     def store_patterns(self, training_patterns, washout, n_harvest, beta_D, beta_W_out, beta_G,
                        noise_std=None, signal_noise: float = None, **kwargs):
         self.training_patterns = training_patterns
-
+        # for key in training_patterns.keys():
+        #     if key == "lorenz_attractor_2d" or key == "mackey_glass_2d":
+        #         training_patterns[key] = (training_patterns[key] * 2) - 1
         z_recordings = []
         r_recordings = []
         p_recordings = []
-
         self.construct_c(training_patterns, washout, n_harvest, **kwargs)
         if signal_noise is not None:
-            for key in training_patterns:
+            for key in training_patterns.keys():
+
+
                 noise = self.rng.normal(0, signal_noise, (len(training_patterns[key]), self.signal_dim))
                 training_patterns[key] = training_patterns[key] + noise
 
@@ -255,6 +262,8 @@ class BaseRFC:
                                                            n_washout=washout,
                                                            pattern_name=name,
                                                            noise_std=noise_std)
+            # if name == "lorenz_attractor_2d" or name == "mackey_glass_2d":
+            #     record_p = (np.array(record_p) + 1)*0.5
             z_recordings.append(record_z)
             r_recordings.append(record_r)
             p_recordings.append(record_p)
@@ -310,6 +319,60 @@ class BaseRFC:
         # plt.plot(S)
         # plt.show()
         return C
+
+    def plot_conceptors(self, ylabel="Sum Conceptor Values",
+                                           bar_width=1, label_interval=50):
+        """
+        Creates a sorted stacked bar plot for a dictionary of vectors.
+
+        Parameters:
+            vectors_dict (dict): Dictionary where keys are vector names (labels) and values are vectors (lists or arrays).
+            title (str, optional): Title of the plot. Defaults to "Stacked Bar Plot".
+            ylabel (str, optional): Label for the y-axis. Defaults to "Sum of Entries".
+            bar_width (float, optional): Width of the bars. Defaults to 0.8.
+        """
+        if False:
+            label_interval = int(self.M/50)
+            sort_on = 'henon_attractor'
+            # self.c = {sort_on: self.c[sort_on], **{k: v for k, v in self.c.items() if k != sort_on}}
+            # print(self.c.keys())
+            # Extract labels and vectors from the dictionary
+            labels = list(self.c.keys())
+
+            vectors = np.array(list(self.c.values()))
+
+            # Calculate the sums of each column (i-th entries of vectors)
+            sums = np.sum(vectors, axis=0)
+            print(f"########## FULL NESS: {np.sum(sums)/(self.M * 4)}")
+
+            # Sort the sums in ascending order and get the sorted indices
+            # sorted_indices = np.argsort(-sums)
+            # sorted_indices = np.argsort(-self.c[sort_on])
+            sorted_indices = range(self.M)
+
+            # Sort the vectors according to the sorted indices
+            sorted_vectors = vectors[:, sorted_indices]
+
+            # Plotting
+            x = np.arange(len(sorted_indices))
+            cumulative_values = np.zeros(len(x))
+
+            for i, label in enumerate(labels):
+                plt.bar(x, sorted_vectors[i], bottom=cumulative_values, label=label, width=bar_width)
+                cumulative_values += sorted_vectors[i]
+
+            # Customize the plot
+            plt.xticks(
+                x[::label_interval],  # Reduce the number of displayed labels
+                [f' {i + 1}' for i in sorted_indices[::label_interval]],
+                rotation=45  # Rotate for better readability
+            )
+            plt.ylabel(ylabel)
+            plt.legend()
+            plt.tight_layout()
+
+            # Show the plot
+            plt.show()
 
     # update A = A v C
     # a(A^j)

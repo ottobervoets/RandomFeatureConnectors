@@ -243,6 +243,10 @@ class BaseRFC:
         self.training_patterns = training_patterns
         if noise_std is not None:
             for i in range(len(training_patterns)):
+                name = training_patterns.keys()[i]
+                if name == "lorenz_attractor" or name == "mackey_glass" or name == "lorenz_attractor_2d" or name == "mackey_glass_2d":
+                    training_patterns[i] = (training_patterns[i] * 2) - 1
+
                 noise = self.rng.normal(0, noise_std, (len(training_patterns[i]), self.signal_dim))
                 training_patterns[i] = training_patterns[i] + noise
         z_recordings = []
@@ -258,6 +262,8 @@ class BaseRFC:
                                                            pattern_id=pattern_id)
             z_recordings.append(record_z)
             r_recordings.append(record_r)
+            if name == "lorenz_attractor" or name == "mackey_glass" or name == "lorenz_attractor_2d" or name == "mackey_glass_2d":
+                record_p = 0.5 * (record_p + 1)
             p_recordings.append(record_p)
 
             self.number_of_patterns_stored += 1
