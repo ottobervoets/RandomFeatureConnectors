@@ -24,7 +24,7 @@ default_parms = {
 }
 
 default_parmas_chaotic = {
-    'n_harvest': 1900,
+    'n_harvest': 3000,
     'washout': 500,
     'beta_W_out': 0.02,
     'beta_G': 0.4,
@@ -40,7 +40,7 @@ default_parmas_chaotic = {
     'spectral_radius': 1.1,
     'N': 250,
     'M': 750,
-    'n_adapt': 1900,
+    'n_adapt': 3000,
     'W_sparseness': 0.1,
     'd_dim': "reservoir_dim",
     'F_method': "patterns",
@@ -72,7 +72,7 @@ default_parmas_matrix = {
     'aperture_lorenz_attractor_2d':  10**2.6,#15,
     'aperture_mackey_glass_2d': 10**3.1, #35,
     'aperture_henon_attractor_2d':  10**3,#18,
-    'n_adapt': 1900,
+    'n_adapt': 3000,
     'washout': 500,
     'beta_W': 0.0001,
     'beta_W_out': 0.01,
@@ -239,7 +239,7 @@ parameters_to_optimize = {  # idea for optmization.
     },
     'spectral_radius': {
         'step_type': 'absolute',
-        'step_size': 0.1,
+        'step_size': 0.05,
         'boundaries': [0.1, 2]
     },
     'W_in_std': {
@@ -254,7 +254,7 @@ parameters_to_optimize = {  # idea for optmization.
     },
     'b_std': {
         'step_type': 'absolute',
-        'step_size': 0.1,
+        'step_size': 0.05,
         'boundaries': [0.1, 2]
     }
 }
