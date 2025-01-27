@@ -121,7 +121,7 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     optimized_params = default_parms.copy()
 
     default_settings = {
-        'experiment_name': "../res/" + "RFC_VRIJDAG_" + f"_{optimized_params['N']}" + ".csv",
+        'experiment_name': "../res/" + "RFC_MAANDAG_" + f"_{optimized_params['N']}" + ".csv",
         'cycles': 3,
         'n_rep': 5
     }
