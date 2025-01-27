@@ -182,7 +182,7 @@ def write_experiment_results(results, filename):
 
 if __name__ == "__main__":
     # arg_v = sys.argv[1]
-    arg_v = 1
+    arg_v = 3
     M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
     default_parmas_chaotic['M'] = M_settings[arg_v]
     default_parmas_chaotic['N'] = 250

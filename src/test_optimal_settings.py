@@ -5,6 +5,7 @@ import pandas as pd
 import json
 import matplotlib.pyplot as plt
 from plot_best import predict_choatic_systems
+sys.path.append('/home3/s3417522/RandomFeatureConnectors')
 
 # give a list of paths (which are "methods")
 
@@ -240,13 +241,16 @@ def simulate_experiment(parameters):
 
 if __name__ == "__main__":
 
-    path = "../res/matrix_conceptor"
+    path = "../res/data_matlab_res"
     # process_csv_files(path)
     # plot_nrmse_from_json(path)
     # plot_individual_scatterplots_by_rfc(path)
 
     # arg_v = int(sys.argv[1])
     # arg_v = 8
-    # M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000, 1250]
+    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000, 1250]
+    for M in M_settings:
+        perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=M)
+
     # m_setting = M_settings[arg_v]
-    perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=1)
+    # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=1)

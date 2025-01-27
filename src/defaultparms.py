@@ -46,7 +46,7 @@ default_parmas_chaotic = {
     'F_method': "patterns",
     'signal_dim': 2,
     'G_method': "W_F",
-    'noise_mean': None,
+    'noise_mean': 0.00001,
     'noise_std': 0.0005,
     'signal_noise' : 0.007,
     'rfc_type': 'PCARFC',
@@ -140,7 +140,7 @@ parameters_to_optimize_matrix = {  # idea for optmization.
         'step_size': 0.1,
         'boundaries': [1, 10_000],
     },
-        'beta_W_out': {
+    'beta_W_out': {
         'step_type': 'relative',
         'step_size': 0.1,
         'boundaries': [0, 10]
@@ -240,22 +240,22 @@ parameters_to_optimize = {  # idea for optmization.
     'spectral_radius': {
         'step_type': 'absolute',
         'step_size': 0.1,
-        'boundaries': [0, 2]
+        'boundaries': [0.1, 2]
     },
     'W_in_std': {
         'step_type': 'absolute',
         'step_size': 0.05,
-        'boundaries': [0, 2]
+        'boundaries': [0.1, 2]
     },
     'W_sr': {
         'step_type': 'absolute',
         'step_size': 0.05,
-        'boundaries': [0, 2]
+        'boundaries': [0.1, 2]
     },
     'b_std': {
         'step_type': 'absolute',
         'step_size': 0.1,
-        'boundaries': [0, 2]
+        'boundaries': [0.1, 2]
     }
 }
 
