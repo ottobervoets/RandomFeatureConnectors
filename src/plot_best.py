@@ -44,13 +44,13 @@ def predict_choatic_systems(test_length=84,  noise=None, **best_params):
     # data['lorenz_attractor'] = pd.read_csv("../data/lorenz.csv", header=None).to_numpy().T
     # data['mackey_glass'] = pd.read_csv("../data/MGSeq.csv", header=None).to_numpy().T
     # data['henon_attractor'] = pd.read_csv("../data/HenonSeq.csv", header=None).to_numpy().T
-    data['rossler_attractor'] = np.loadtxt('../matlab_copy/1.csv', delimiter=",").T
-    data['lorenz_attractor'] = 0.5 * (1 +np.loadtxt('../matlab_copy/2.csv', delimiter=",").T)
-    data['mackey_glass'] = 0.5 * (1 +np.loadtxt('../matlab_copy/3.csv', delimiter=",").T)
-    data['henon_attractor'] = np.loadtxt('../matlab_copy/4.csv', delimiter=",").T
+    # data['rossler_attractor'] = np.loadtxt('../matlab_copy/1.csv', delimiter=",").T
+    # data['lorenz_attractor'] = 0.5 * (1 +np.loadtxt('../matlab_copy/2.csv', delimiter=",").T)
+    # data['mackey_glass'] = 0.5 * (1 +np.loadtxt('../matlab_copy/3.csv', delimiter=",").T)
+    # data['henon_attractor'] = np.loadtxt('../matlab_copy/4.csv', delimiter=",").T
 
     # pattern_generators = [lorenz_attractor]#, mackey_glass, henon_attractor]
-    # pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
+    pattern_generators = [rossler_attractor, lorenz_attractor, mackey_glass, henon_attractor]
     pattern_generators = [rossler_attractor_2d,  # these are those from herbert.
                           lorenz_attractor_2d,
                           mackey_glass_2d,
@@ -143,60 +143,15 @@ def plot_predictions(data, save_fig=False, save_path=None):
 
 
 if __name__ == "__main__":
-    matrix_parameters = {'N':500, 'W_sr': 0.6, 'bias':0.4, 'W_in_std': 1.2,
-                         'beta_W': 0.0001, 'beta_W_out': 0.01,
-                         'aperture_rossler_attractor': 3000,
-                         'aperture_lorenz_attractor': 400,
-                         'aperture_mackey_glass': 1300,
-                         'aperture_henon_attractor': 630,
-                         'n_adapt': 2000, 'washout':500, 'M':1,
-                         'rfc_type': 'matrix_conceptor'
-
-
-                         }
-
-
-
-    # path = "../res/"+"2024-12-18 11_06_50.csv" #base
-    path = "../res/" + "2025-01-24 11:34:43.csv" #pca
-    # path = "../res/optimize_different_M_2/2025-01-06 16_26_39.csv"
-
-    # path = "../res/" + "2024-12-18 11_03_39.csv"  # pca bigger
-    # path = "../res/" + "2024-12-18 11_04_17.csv"  # base bigger
+    path = "../res/" + "2025-01-28 10:02:52_250.csv" #pca
     best_params = extract_lowest_nrmse_parameters(path)#, M = 500)
 
-    # best_params['aperture_rossler_attractor'] = 500
-    # best_params = default_parmas_chaotic
-    # best_params['verbose'] = True
-    # best_params['sample_rate'] = 10
-
-    # best_params['M'] = 125
-    # best_params['N'] = 250
-    # best_params['max_n_features'] = 250
-    # best_params['aperture_mackey_glass'] = 10
-    # best_params['rfc_type'] = 'PCARFC'
-    # best_params = default_parmas_matrix
-
-    # # noise = 0.01
-    # print(best_params)
-    # # best_params['aperture_rossler_attractor'] = 300
     for name, value in best_params.items():
         print(f"\'{name}\': {value},")
-    # best_params['n_adapt'] = 3000
-    # best_params['verbose'] = True
-    # best_params['rfc_type'] = 'base'
-    # best_params['aperture_lorenz_attractor'] =
-    # best_params['aperture_henon_attractor'] = 50
 
-    # best_params['signal_noise'] = 0.001
-
-    # cProfile.run("predict_choatic_systems(test_length=84, **best_params)", sort="cumtime")
-    # np.random.seed(1)
-    best_params['n_adapt'] = 1900
-    results = predict_choatic_systems(test_length=84, noise=None, **best_params)
-    # results = predict_choatic_systems(test_length=84, noise=None, **default_parmas_chaotic)
-    # results = predict_choatic_systems(test_length=500, noise=None, **best_params)
-    # print(best_params['rfc_type'])
+    # best_params['n_adapt'] = 1900
+    # best_params['aperture_rossler_attractor_2d'] = 600
+    results = predict_choatic_systems(test_length=84, noise=None, **default_parmas_chaotic)
     plot_predictions(results)
 
 

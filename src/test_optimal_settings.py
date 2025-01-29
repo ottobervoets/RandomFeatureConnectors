@@ -188,6 +188,7 @@ def perform_experiments(folder_path, n_rep, experiment_function, M_SETTING):
             m_value = None
             # Perform experiments for each M
             for m_value, parameters in data.items():
+                print(f"{m_value}, ")
                 m_value = int(m_value)
                 print("Mvalue = ", m_value)
                 print(m_value, M_SETTING)
@@ -241,16 +242,21 @@ def simulate_experiment(parameters):
 
 if __name__ == "__main__":
 
-    path = "../res/data_matlab_res"
-    # process_csv_files(path)
-    # plot_nrmse_from_json(path)
-    # plot_individual_scatterplots_by_rfc(path)
+    path = "../res/matlab_maandag"
+    process_csv_files(path)
+    plot_nrmse_from_json(path)
+    plot_individual_scatterplots_by_rfc(path)
 
     # arg_v = int(sys.argv[1])
     # arg_v = 8
-    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000, 1250]
-    for M in M_settings:
-        perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=M)
+    # M_settings = [100, 125, 187, 250, 312, 375, 500]#, 750, 1000]
+    #750 en 1000 moeten nog.
+
+    # for M in M_settings:
+    # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems,
+    #                     M_SETTING=187)
+    # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems,
+    #                     M_SETTING=250)
 
     # m_setting = M_settings[arg_v]
     # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=1)

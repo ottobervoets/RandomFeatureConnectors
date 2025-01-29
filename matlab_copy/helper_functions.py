@@ -50,9 +50,7 @@ def lorenz_attractor_2d(total_time, increments_per_unit=200, subsample_rate=15, 
 
     # Washout phase
     for _ in range(init_washout_length):
-        ls += delta * np.array([sigma * (ls[1] - ls[0]),
-                                r * ls[0] - ls[1] - ls[0] * ls[2],
-                                ls[0] * ls[1] - b * ls[2]])
+        ls += delta * np.array([sigma * (ls[1] - ls[0]), r * ls[0] - ls[1] - ls[0] * ls[2], ls[0] * ls[1] - b * ls[2]])
 
     # Generate sequence
     for n in range(sample_length):

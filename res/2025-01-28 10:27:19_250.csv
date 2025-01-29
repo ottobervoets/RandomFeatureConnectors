@@ -1,0 +1,2 @@
+N,M,rfc_type,aperture_rossler_attractor,aperture_lorenz_attractor,aperture_mackey_glass,aperture_henon_attractor,aperture_rossler_attractor_2d,aperture_lorenz_attractor_2d,aperture_mackey_glass_2d,aperture_henon_attractor_2d,n_adapt,washout,beta_W,beta_W_out,W_in_std,W_sr,noise_std,signal_noise,bias,experiment_name,cycles,n_rep,nrmse
+250,500,matrix_conceptor,50.0,20.0,35.0,20.0,630.957344480193,398.1071705534973,1258.9254117941675,1000,3000,500,0.0001,0.01,1.2,0.8,0.000121,0.0005,0.4,../res/2025-01-28 10:27:19_250.csv,3,5,0.004789515092428596

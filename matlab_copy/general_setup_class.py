@@ -88,8 +88,9 @@ class MatriXConceptorWorking:
                 # print(patt.shape)
                 u = patt[n]
                 u_in = u
-                if name == "lorenz_attractor" or name == "mackey_glass":
-                    u_in = (u*2) - 1
+                # if name == "lorenz_attractor" or name == "mackey_glass":
+                #     print("adapted", name)
+                #     u_in = (u*2) - 1
                 xOld = x
                 x = np.tanh(self.Wstar @ x + self.Win @ u_in + self.Wbias)
                 # print(x.shape)
@@ -139,6 +140,7 @@ class MatriXConceptorWorking:
         # aperture = [1000, 460, 400, 700]
         for p, name in zip(range(num_p), training_patterns.keys()):
             aperture = kwargs[f"aperture_{name}"]
+            print(f"aperture {name}, {aperture}")
             R = patternRs[p]
             C = R @ np.linalg.inv(R + (aperture ** -2) * np.identity(self.N))
             self.Cs[name] = C

@@ -130,7 +130,7 @@ def plot_binned_nrmse_results_with_overlap_and_spacing(
     plt.show()
 
 
-folder_path = '../../res/optimize_different_M_2'  # Replace with your folder path
+folder_path = '../../res/data_matlab_res'  # Replace with your folder path
 plot_binned_nrmse_results_with_overlap_and_spacing(
     folder_path, repetitions=30, grid_shape=(3, 3), num_bins=30, bar_spacing=0
 )

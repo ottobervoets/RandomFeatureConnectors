@@ -3,6 +3,12 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 
+names_dict = {
+    'PCARFC': 'PCA Feature Conceptor',
+    'base': 'Random Feature Conceptor',
+    'matrix': 'Matrix Conceptor'
+}
+
 def plot_nrmse_results_with_error_bars(folder_path, repetitions=30):
     """
     Plot NRMSE values with error bars from experiment results JSON files.
@@ -56,33 +62,48 @@ def plot_nrmse_results_with_error_bars(folder_path, repetitions=30):
                 rfc_data[rfc_type][M]['std_dev'].append(std_dev_nrmse)
     print(rfc_data)
     # Plot the data
-    fig, ax = plt.subplots(figsize=(12, 8))
+    fig, ax = plt.subplots(figsize=(9, 5))
 
     for rfc_type, M_values in rfc_data.items():
         M_sorted = sorted(M_values.keys())
         means = [np.mean(M_values[M]['mean']) for M in M_sorted]
         std_devs = [np.mean(M_values[M]['std_dev']) for M in M_sorted]
         if rfc_type == "matrix":
-            ax.hlines(means[0], 100, 1000, label=f"matrix", colors = 'green')
+            ax.hlines(means[0], 100, 1000, label=f"{names_dict[rfc_type]}", colors='C2',linewidth = 1)
+            ax.errorbar(
+                550,
+                means,
+                yerr=[1 * sd for sd in std_devs],
+                # label=f"{names_dict[rfc_type]}",
+                capsize=3,
+                elinewidth=1,
+            )
         # Plot with error bars (2 standard deviations)
-        ax.errorbar(
-            M_sorted,
-            means,
-            yerr=[1 * sd for sd in std_devs],
-            label=rfc_type,
-            capsize=5,
-            marker='o',
-        )
+        else:
+            ax.errorbar(
+                M_sorted,
+                means,
+                yerr=[1 * sd for sd in std_devs],
+                label=f"{names_dict[rfc_type]}",
+                capsize=3,
+                marker='o',
+                markersize=3,
+                elinewidth=1,
+                linewidth=1
+            )
 
-    ax.set_title('NRMSE Results with Error Bars (1 sd)', fontsize=16)
+    # ax.set_title('NRMSE Results with Error Bars (1 sd)', fontsize=16)
     ax.set_xlabel('M', fontsize=14)
     ax.set_ylabel('NRMSE', fontsize=14)
     ax.legend(title='RFC Type', fontsize=12)
     ax.grid(True)
+
     plt.tight_layout()
+    ax.set_xticks(range(0,1100,100))
+    # plt.minorticks_on()
     plt.show()
 
 # Example usage
 if __name__ == "__main__":
-    folder_path = '../res/optimize_different_M_2'  # Replace with your folder path
+    folder_path = '../res/matlab_maandag'  # Replace with your folder path
     plot_nrmse_results_with_error_bars(folder_path, repetitions=30)

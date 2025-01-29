@@ -1,0 +1,24 @@
+{
+    "500": {
+        "N": 250,
+        "M": 500,
+        "rfc_type": "matrix_conceptor",
+        "aperture_rossler_attractor_2d": 59.895,
+        "aperture_lorenz_attractor_2d": 16.2,
+        "aperture_mackey_glass_2d": 35.0,
+        "aperture_henon_attractor_2d": 20.0,
+        "n_adapt": 3000,
+        "washout": 500,
+        "beta_W": 0.0001089,
+        "beta_W_out": 0.01,
+        "W_in_std": 1.2,
+        "W_sr": 0.8,
+        "noise_std": 0.00011,
+        "signal_noise": 0.000405,
+        "bias": 0.4,
+        "experiment_name": "../res/2025-01-28 14:41:30_250.csv",
+        "cycles": 3,
+        "n_rep": 5,
+        "nrmse": 0.0024069512898898
+    }
+}

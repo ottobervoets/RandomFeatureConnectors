@@ -24,63 +24,80 @@ default_parms = {
 }
 
 default_parmas_chaotic = {
-    'n_harvest': 3000,
-    'washout': 500,
-    'beta_W_out': 0.02,
-    'beta_G': 0.4,
-    'beta_D': (6*(10**-5)),
-    # 'aperture_rossler_attractor': 48,
-    # 'aperture_lorenz_attractor': 28,
-    # 'aperture_mackey_glass': 30,
-    # 'aperture_henon_attractor': 18,
-    'aperture_rossler_attractor_2d': 48,# 10 ** 2.8,  # 48,
-    'aperture_lorenz_attractor_2d': 28,#10 ** 2.6,  # 15,
-    'aperture_mackey_glass_2d': 30,#10 ** 3.1,  # 35,
-    'aperture_henon_attractor_2d': 18,#10 ** 3,  # 18,
-    'spectral_radius': 1.1,
-    'N': 250,
-    'M': 750,
-    'n_adapt': 3000,
-    'W_sparseness': 0.1,
-    'd_dim': "reservoir_dim",
-    'F_method': "patterns",
-    'signal_dim': 2,
-    'G_method': "W_F",
-    'noise_mean': 0.00001,
-    'noise_std': 0.0005,
-    'signal_noise' : 0.007,
-    'rfc_type': 'PCARFC',
-    'max_n_features': 60,
-    'verbose': False,
-    'W_in_std': 1.5,
-    'W_sr': 1.2,
-    'sample_rate': 15,
-    'verbose': False,
-    'b_std': 0.4
-    # 'b_in_std'
+    "n_harvest": 3000,
+    "washout": 500,
+    "beta_W_out": 0.02,
+    "beta_G": 0.4356,
+    "beta_D": 6.000000000000001e-05,
+    "aperture_rossler_attractor_2d": 48.0,
+    "aperture_lorenz_attractor_2d": 28.0,
+    "aperture_mackey_glass_2d": 30.0,
+    "aperture_henon_attractor_2d": 18.0,
+    "spectral_radius": 1.1,
+    "N": 250,
+    "M": 1000,
+    "n_adapt": 3000,
+    "W_sparseness": 0.1,
+    "d_dim": "reservoir_dim",
+    "F_method": "patterns",
+    "signal_dim": 2,
+    "G_method": "W_F",
+    "noise_mean": 0,
+    "noise_std": 0.0003644999999999,
+    "signal_noise": 0.00693,
+    "rfc_type": "PCARFC",
+    "max_n_features": 275.0,
+    "verbose": False,
+    "W_in_std": 1.5,
+    "W_sr": 1.2,
+    "sample_rate": 15,
+    "b_std": 0.4,
+    "experiment_name": "../res/RFC_MAANDAG__250.csv",
+    "cycles": 3,
+    "n_rep": 5,
+    "nrmse": 0.002112948322925
 }
 
-default_parmas_matrix = {
-    'N': 500,
-    'M': 1,
-    'rfc_type': 'matrix_conceptor', #10 ** 3, 10 ** 2.6, 10 ** 3.1, 10 ** 2.8
-    'aperture_rossler_attractor': 10**2.8, #48,
-    'aperture_lorenz_attractor':  10**2.6,#15,
-    'aperture_mackey_glass': 10**3.1, #35,
-    'aperture_henon_attractor':  10**3,#18,
-    'aperture_rossler_attractor_2d': 10**2.8, #48,
-    'aperture_lorenz_attractor_2d':  10**2.6,#15,
-    'aperture_mackey_glass_2d': 10**3.1, #35,
-    'aperture_henon_attractor_2d':  10**3,#18,
-    'n_adapt': 3000,
-    'washout': 500,
-    'beta_W': 0.0001,
-    'beta_W_out': 0.01,
-    'W_in_std': 1.2,
-    'W_sr': 0.6,
-    'bias': 0.4,
-    'noise_std': 0.0001,
-    'signal_noise': 0.0005,
+default_parmas_matrix_500 = {
+    "N": 500,
+    "M": 500,
+    "rfc_type": "matrix_conceptor",
+    # "aperture_rossler_attractor": 10**3, #50.0,
+    # "aperture_lorenz_attractor": 10**2.6,#20.0,
+    # "aperture_mackey_glass": 10**3.1,#35.0,
+    # "aperture_henon_attractor": 10**2.8,#20.0,
+    'aperture_rossler_attractor_2d': 10 ** 2.8,  # 48,
+    'aperture_lorenz_attractor_2d':  10 ** 2.6,  # 15,
+    'aperture_mackey_glass_2d': 10**3.1,# 10 ** 3.1,  # 35,
+    'aperture_henon_attractor_2d': 10 ** 3,  # 18,
+    "n_adapt": 1900,
+    "washout": 500,
+    "beta_W": 0.0001,
+    "beta_W_out": 0.01,
+    "W_in_std": 1.2,
+    "W_sr": 0.6,
+    "noise_std":None,# 0.00011,
+    "signal_noise":None,# 0.0005,
+    "bias": 0.4
+}
+
+best_matrix_parms_250 = {
+    "N": 250,
+    "M": 500,
+    "rfc_type": "matrix_conceptor",
+    "aperture_rossler_attractor_2d": 50.0,
+    "aperture_lorenz_attractor_2d": 20.0,
+    "aperture_mackey_glass_2d": 35.0,
+    "aperture_henon_attractor_2d": 20.0,
+    "n_adapt": 3000,
+    "washout": 500,
+    "beta_W": 0.0001,
+    "beta_W_out": 0.01,
+    "W_in_std": 1.2,
+    "W_sr": 0.8,
+    "noise_std": 0.00011,
+    "signal_noise": 0.0005,
+    'bias': 0.4
 }
 
 parameters_to_optimize_matrix = {  # idea for optmization.
@@ -122,22 +139,22 @@ parameters_to_optimize_matrix = {  # idea for optmization.
 
     'aperture_rossler_attractor_2d': {
         'step_type': 'relative',
-        'step_size': 0.25,
+        'step_size': 0.2,
         'boundaries': [1, 10_000],
     },
     'aperture_lorenz_attractor_2d': {
         'step_type': 'relative',
-        'step_size': 0.25,
+        'step_size': 0.2,
         'boundaries': [1, 10_000],
     },
     'aperture_mackey_glass_2d': {
         'step_type': 'relative',
-        'step_size': 0.25,
+        'step_size': 0.2,
         'boundaries': [1, 10_000],
     },
     'aperture_henon_attractor_2d': {
         'step_type': 'relative',
-        'step_size': 0.1,
+        'step_size': 0.2,
         'boundaries': [1, 10_000],
     },
     'beta_W_out': {
@@ -148,17 +165,17 @@ parameters_to_optimize_matrix = {  # idea for optmization.
     'W_in_std': {
         'step_type': 'absolute',
         'step_size': 0.05,
-        'boundaries': [0, 2]
+        'boundaries': [.1, 2]
     },
     'W_sr': {
         'step_type': 'absolute',
-        'step_size': 0.1,
-        'boundaries': [0, 2]
+        'step_size': 0.05,
+        'boundaries': [0.1, 2]
     },
     'bias': {
         'step_type': 'absolute',
-        'step_size': 0.1,
-        'boundaries': [0, 2]
+        'step_size': 0.05,
+        'boundaries': [0.1, 2]
 
     }
 }
@@ -181,11 +198,10 @@ parameters_to_optimize = {  # idea for optmization.
         'step_size': 0.1,
         'boundaries': [0, 10]
     },
-
     'max_n_features': {
         'step_type': 'relative',
-        'step_size': 0.1,
-        'boundaries': [0, 10]
+        'step_size': 0.25,
+        'boundaries': [0, 1000]
     },
     'aperture_rossler_attractor_2d': {
         'step_type': 'relative',
@@ -204,7 +220,7 @@ parameters_to_optimize = {  # idea for optmization.
     },
     'aperture_henon_attractor_2d': {
         'step_type': 'relative',
-        'step_size': 0.1,
+        'step_size': 0.25,
         'boundaries': [1, 10_000],
     },
     # 'aperture_rossler_attractor': {
@@ -234,7 +250,7 @@ parameters_to_optimize = {  # idea for optmization.
     },
     'beta_D': {
         'step_type': 'relative',
-        'step_size': 0.1,
+        'step_size': 0.25,
         'boundaries': [0, 10]
     },
     'spectral_radius': {

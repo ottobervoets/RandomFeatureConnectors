@@ -44,22 +44,22 @@ Wbias = BiasScaling * WbiasRaw
 
 patts = []
 # Set pattern handles
-if newChaosData:
-    L = washoutLength + learnLength
-    LorenzSeq = lorenz_attractor_2d(200, 15, L, 5000)
-    patts.append(lambda n: 2 * LorenzSeq[:, n] - 1)
-    RoesslerSeq = rossler_attractor_2d(200, 150, L, 5000)
-    patts.append(lambda n: RoesslerSeq[:, n])
-    MGSeq = mackey_glass_2d(17, 10, 3, L, 5000)
-    patts.append(lambda n: 2 * MGSeq[:, n] - 1)
-    HenonSeq = henon_attractor_2d(L, 1000)
-    patts.append(lambda n: HenonSeq[:, n])
+# if newChaosData:
+#     L = washoutLength + learnLength
+#     LorenzSeq = lorenz_attractor_2d(200, 15, L, 5000)
+#     patts.append(lambda n: 2 * LorenzSeq[:, n] - 1)
+#     RoesslerSeq = rossler_attractor_2d(200, 150, L, 5000)
+#     patts.append(lambda n: RoesslerSeq[:, n])
+#     MGSeq = mackey_glass_2d(17, 10, 3, L, 5000)
+#     patts.append(lambda n: 2 * MGSeq[:, n] - 1)
+#     HenonSeq = henon_attractor_2d(L, 1000)
+#     patts.append(lambda n: HenonSeq[:, n])
 
-# LorenzSeq = np.loadtxt('1.csv', delimiter=",")
-# patts.append(LorenzSeq.T)
-# patts.append(np.loadtxt('2.csv', delimiter=",").T)
-# patts.append(np.loadtxt('3.csv', delimiter=",").T)
-# patts.append(np.loadtxt('4.csv', delimiter=",").T)
+LorenzSeq = np.loadtxt('1.csv', delimiter=",")
+patts.append(LorenzSeq.T)
+patts.append(np.loadtxt('2.csv', delimiter=",").T)
+patts.append(np.loadtxt('3.csv', delimiter=",").T)
+patts.append(np.loadtxt('4.csv', delimiter=",").T)
 
 
 num_p = len(patts)
@@ -86,7 +86,7 @@ for p in range(num_p):
 
     for n in range(washoutLength + learnLength):
         # print(patt.shape)
-        u = patt(n)
+        u = patt[n]
         xOld = x
         x = np.tanh(Wstar @ x + Win @ u + Wbias)
         # print(x.shape)

@@ -94,7 +94,7 @@ def plot_nrmse_results_with_measurements_same_color(folder_path, repetitions=30)
 # Example usage
 
 
-folder_path = "../res/optimize_different_M_2"  # Replace with your folder path
+folder_path = "../res/matlab_maandag"  # Replace with your folder path
 plot_nrmse_results_with_measurements_same_color(folder_path, repetitions=30)
 
 

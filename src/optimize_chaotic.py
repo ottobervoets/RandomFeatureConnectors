@@ -119,9 +119,10 @@ def go_one_driection(current_param, info_dict, params, direction, settings):
 def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimization_settings):
     # get starting parameters
     optimized_params = default_parms.copy()
-
+    now = datetime.now()
     default_settings = {
-        'experiment_name': "../res/" + "RFC_MAANDAG_" + f"_{optimized_params['N']}" + ".csv",
+        # 'experiment_name': "../res/" + now.strftime("%Y-%m-%d %H:%M:%S") + f"_{optimized_params['N']}" + ".csv",
+        'experiment_name': f"../res/{optimized_params['rfc_type']}_{optimized_params['N']}.csv",
         'cycles': 3,
         'n_rep': 5
     }
@@ -181,7 +182,7 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
-    arg_v = sys.argv[1]
+    arg_v = int(sys.argv[1])
     # arg_v = 3
     M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
     default_parmas_chaotic['M'] = M_settings[arg_v]

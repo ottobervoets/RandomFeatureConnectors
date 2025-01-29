@@ -23,7 +23,6 @@ class MatrixConceptor:
         self.last_training_state = {}
 
     def create_W(self, sparseness=0.1, W_spectral_radius=None):
-        sparseness = 10/self.N
         total_elements = self.N ** 2
         num_non_zero = int(total_elements * sparseness)
 
@@ -62,14 +61,17 @@ class MatrixConceptor:
             self.r = np.zeros(self.N)
             conceptor_recordings =[]
             if signal_noise is not None:
-                # print("added signal noise")
+                print("added signal noise")
                 values += np.random.normal(loc=0, scale=signal_noise, size=np.shape(values))
             # print(f"driving with {name} with shape {np.shape(values)}")
             for t in range(washout+n_adapt):
                 x_old = self.r
                 # self.one_step_driving(p_t = values[t], reservoir_noise=noise_std)
-                self.r = np.tanh(self.W_in @ values_in[t] + self.W_star @ self.r + self.b)
-
+                if noise_std is None:
+                    self.r = np.tanh(self.W_in @ values_in[t] + self.W_star @ self.r + self.b)
+                else:
+                    self.r = np.tanh(self.W_in @ values_in[t] + self.W_star @ self.r + self.b +
+                                     np.random.normal(loc=0, scale=noise_std, size=self.N))
                 if t >= washout:
                     X_tilde.append(x_old)
                     X.append(self.r)
@@ -87,6 +89,8 @@ class MatrixConceptor:
 
         self.W = (np.linalg.inv(X_tilde @ X_tilde.T + beta_W * np.identity(self.N)) @ X_tilde @ (np.arctanh(X) - B).T).T
         # self.D = (np.linalg.inv(X_tilde @ X_tilde.T + beta_W + np.identity(self.N)) @ X_tilde @ (self.W_in @ P).T).T
+        print(f"NRSME readout {nrmse(self.W_out @ X, P)}"
+              f"NRSME internal {nrmse(self.W @ X_tilde, np.arctanh(X) - B)}")
 
     def one_step_halucinating(self, pattern_name):
         self.r = self.C[pattern_name] @ np.tanh(self.W @ self.r + self.b)
@@ -111,6 +115,7 @@ class MatrixConceptor:
         plt.show()
 
     def construct_conceptor(self, aperture, xCollector, name, n_adapt):
+        print(name, aperture)
         R = xCollector @ xCollector.T /n_adapt
         self.C[name] = R @ np.linalg.inv(R + (aperture ** -2) * np.identity(self.N))
 

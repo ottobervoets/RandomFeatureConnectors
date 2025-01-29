@@ -135,3 +135,8 @@ default_parmas_chaotic = {
     'verbose': False
 
 }
+
+
+Notes
+100 PCA and RFC
+2
