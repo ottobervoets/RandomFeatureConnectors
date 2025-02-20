@@ -13,7 +13,12 @@ from matlab_copy.helper_functions import (rossler_attractor_2d,
                                           mackey_glass_2d,
                                           lorenz_attractor_2d,
                                           henon_attractor_2d)
+import json
 
+name_dict = {'rossler_attractor_2d': 'Rossler Attractor',
+             'lorenz_attractor_2d': 'Lorenz Attractor',
+             'mackey_glass_2d': 'Mackey Glass',
+             'henon_attractor_2d': 'Hennon Attractor'}
 
 def extract_lowest_nrmse_parameters(csv_file, M=None):
     # Read the CSV file into a pandas DataFrame
@@ -73,9 +78,10 @@ def predict_choatic_systems(test_length=84,  noise=None, **best_params):
     rfc = create_RFC(**best_params)
     # print(rfc.training_patterns, "after construction")
     rfc.store_patterns(**best_params)
-    # if noise is not None:
-    #     for key, value in rfc.last_training_z_state.items():
-    #         rfc.last_training_z_state[key] = value + np.random.normal(loc=0,scale=noise, size=best_params['M'])
+    # plot_stacked_bar(rfc.c)
+    if noise is not None:
+        for key, value in rfc.last_training_z_state.items():
+            rfc.last_training_z_state[key] = value + np.random.normal(loc=0,scale=noise, size=best_params['M'])
     # print("#######",total_pattern["henon_attractor"][0] - rfc.training_patterns["henon_attractor"][0])
     # print("--------", np.shape(total_pattern["henon_attractor"]), np.shape(rfc.training_patterns["henon_attractor"]))
     # print("++++", rfc.training_patterns.keys(), total_pattern.keys())
@@ -104,7 +110,7 @@ def plot_predictions(data, save_fig=False, save_path=None):
         save_path (str): Path to save the figure if save_fig is True. Default is None.
     """
     num_items = len(data)
-    fig, axes = plt.subplots(1, num_items, figsize=(5 * num_items, 5))
+    fig, axes = plt.subplots(1, num_items, figsize=(10, 3))
 
     if num_items == 1:
         axes = [axes]  # Ensure axes is iterable if only one subplot.
@@ -128,8 +134,11 @@ def plot_predictions(data, save_fig=False, save_path=None):
         ax.plot(predict_x[0], predict_y[0], marker='o', color='Green')
         ax.plot(predict_x[-1], predict_y[-1], marker='o', color='Red')
         # Titles and annotations
-        ax.set_title(name)
+        ax.set_title(name_dict[name])
         ax.legend()
+        # ax.set_xticks(None)#[0,1])
+        # ax.set_yticks(None)#[0,1])
+        ax.axis('off')
         ax.text(0.5, -0.1, f"NRMSE: {nrmse:.5f}", ha='center', transform=ax.transAxes, fontsize=10)
 
     plt.tight_layout()
@@ -142,17 +151,81 @@ def plot_predictions(data, save_fig=False, save_path=None):
         plt.show()
 
 
+def plot_stacked_bar(data, cmap="viridis", bar_spacing=0):
+    """
+    Plots a stacked bar chart where:
+    - Each list in the dictionary represents a series of weights.
+    - The number of bars equals the length of the lists.
+    - Each bar is stacked, with the total height being the sum of corresponding elements across lists.
+    - Bar spacing can be adjusted with `bar_spacing` (default: 0 for no gaps).
+
+    Parameters:
+    - data: dict, where keys are categories and values are lists of equal length.
+    - cmap: str, matplotlib colormap for segment coloring.
+    - bar_spacing: float, controls the space between bars (default = 0, no spacing).
+    """
+
+    categories = list(data.keys())
+    values = np.array(list(data.values()))  # Shape: (num_categories, num_bars)
+
+    if len(set(map(len, values))) > 1:
+        raise ValueError("All lists in the dictionary must have the same length.")
+
+    num_bars = values.shape[1]  # Number of bars (length of lists)
+    bar_width = 1 - bar_spacing  # Adjust width based on spacing
+    x = np.arange(num_bars)  # X-axis positions for bars
+    colors = plt.get_cmap(cmap)(np.linspace(0, 1, values.shape[0]))  # Unique colors per category
+
+    fig, ax = plt.subplots(figsize=(9, 4))
+    bottoms = np.zeros(num_bars)  # Initialize bottom positions
+
+    for i, (category, color) in enumerate(zip(categories, colors)):
+        ax.bar(x, values[i], width=bar_width, bottom=bottoms, label=name_dict[category])
+        bottoms += values[i]  # Update bottom positions for next stack
+
+    ax.set_xlabel("Index")
+    ax.set_ylabel("Conceptor Weights")
+    # ax.set_title("Stacked Bar Plot of Weights")
+    ax.legend()
+
+    plt.xticks(ticks=np.linspace(0, num_bars, 5, dtype=int))  # Reduce number of x-ticks
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.tight_layout()
+    plt.show()
+
+
+
 if __name__ == "__main__":
-    path = "../res/" + "2025-01-28 10:02:52_250.csv" #pca
-    best_params = extract_lowest_nrmse_parameters(path)#, M = 500)
+    # path = "../res/" + "matrix_conceptor_250_tuesday.csv" #pca
+    # best_params = extract_lowest_nrmse_parameters(path)#, M=500)
+    # # best_params['aperture_rossler_attractor_2d'] = 150
+    # for name, value in best_params.items():
+    #     print(f"\'{name}\': {value},")
+    #
+    # # best_params['n_adapt'] = 1900
+    # # best_params['aperture_rossler_attractor_2d'] = 600
+    #
+    # results = predict_choatic_systems(test_length=84, noise=None, **default_parmas_matrix_500)
+    # plot_predictions(results)
 
-    for name, value in best_params.items():
-        print(f"\'{name}\': {value},")
 
-    # best_params['n_adapt'] = 1900
-    # best_params['aperture_rossler_attractor_2d'] = 600
-    results = predict_choatic_systems(test_length=84, noise=None, **default_parmas_chaotic)
+    ############ Noise
+    json_path = "../res/matlab_woensdag/optimal_parameters_per_M_PCARFC.json"
+    M = 1000
+    # noise = 0.00005 #....
+    noise=None
+
+    with open(json_path, "r") as f:
+        data = json.load(f)
+    params = data[f'{M}']
+    # params['max_n_features'] = 250
+    print(params)
+    params['max_n_features'] =250
+    params['aperture_rossler_attractor_2d'] = 500
+
+    results = predict_choatic_systems(test_length=200, noise=noise, **params)
     plot_predictions(results)
+
 
 
 

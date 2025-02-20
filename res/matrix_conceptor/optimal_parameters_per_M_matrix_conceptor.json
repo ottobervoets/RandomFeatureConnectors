@@ -1,0 +1,24 @@
+{
+    "250": {
+        "N": 250,
+        "M": 500,
+        "rfc_type": "matrix_conceptor",
+        "aperture_rossler_attractor_2d": 150.0,
+        "aperture_lorenz_attractor_2d": 25.6,
+        "aperture_mackey_glass_2d": 40.96,
+        "aperture_henon_attractor_2d": 60.0,
+        "n_adapt": 3000,
+        "washout": 500,
+        "beta_W": 0.0001,
+        "beta_W_out": 0.00729,
+        "W_in_std": 1.15,
+        "W_sr": 0.75,
+        "noise_std": 8.645364089999999e-05,
+        "signal_noise": 0.000405,
+        "bias": 0.3,
+        "experiment_name": "../res/matrix_conceptor_250_tuesday.csv",
+        "cycles": 3,
+        "n_rep": 5,
+        "nrmse": 0.0022899590612511
+    }
+}

@@ -6,7 +6,8 @@ import numpy as np
 names_dict = {
     'PCARFC': 'PCA Feature Conceptor',
     'base': 'Random Feature Conceptor',
-    'matrix': 'Matrix Conceptor'
+    'matrix250': 'Matrix Conceptor N=250',
+    'matrix500': 'Matrix Conceptor N=500',
 }
 
 def plot_nrmse_results_with_error_bars(folder_path, repetitions=30):
@@ -68,16 +69,31 @@ def plot_nrmse_results_with_error_bars(folder_path, repetitions=30):
         M_sorted = sorted(M_values.keys())
         means = [np.mean(M_values[M]['mean']) for M in M_sorted]
         std_devs = [np.mean(M_values[M]['std_dev']) for M in M_sorted]
-        if rfc_type == "matrix":
-            ax.hlines(means[0], 100, 1000, label=f"{names_dict[rfc_type]}", colors='C2',linewidth = 1)
+        if rfc_type == "matrix250":
+            x=0
+            ax.hlines(means[0], 0, 1000, label=f"{names_dict[rfc_type]}", colors='C0',linewidth = 1)
             ax.errorbar(
-                550,
+                x,
                 means,
                 yerr=[1 * sd for sd in std_devs],
                 # label=f"{names_dict[rfc_type]}",
                 capsize=3,
                 elinewidth=1,
             )
+            ax.plot(x, means[0], marker='o', markersize=3, color='C0')
+
+        elif rfc_type == "matrix500":
+            x=50
+            ax.hlines(means[0], 0, 1000, label=f"{names_dict[rfc_type]}", colors='C3',linewidth = 1)
+            ax.errorbar(
+                x,
+                means,
+                yerr=[1 * sd for sd in std_devs],
+                # label=f"{names_dict[rfc_type]}",
+                capsize=3,
+                elinewidth=1,
+            )
+            ax.plot(x, means[0], marker='o', markersize=3, color='C3')
         # Plot with error bars (2 standard deviations)
         else:
             ax.errorbar(
@@ -100,10 +116,13 @@ def plot_nrmse_results_with_error_bars(folder_path, repetitions=30):
 
     plt.tight_layout()
     ax.set_xticks(range(0,1100,100))
+    ax.set_yticks(np.linspace(0.002, 0.008, 7))
+    ax.set_ylim(0.002,0.008)
+
     # plt.minorticks_on()
     plt.show()
 
 # Example usage
 if __name__ == "__main__":
-    folder_path = '../res/matlab_maandag'  # Replace with your folder path
-    plot_nrmse_results_with_error_bars(folder_path, repetitions=30)
+    folder_path = '../res/laat_res'  # Replace with your folder path
+    plot_nrmse_results_with_error_bars(folder_path, repetitions=10)

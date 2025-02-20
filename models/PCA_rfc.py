@@ -28,6 +28,7 @@ class PCARFC(BaseRFC):
             corr = R.T @ R
             pca = PCA()
             pca.fit(corr)
+            print(np.linalg.norm(pca.components_[0:max_n_components][10]))
             F.extend(pca.components_[0:max_n_components])
         if self.verbose:
             print(f"{len(F)} components are taken from the pca, the remaining {self.M-len(F)} will be sampled randomly")

@@ -1,0 +1,42 @@
+PCA
+5 times in a row stable for 5000 timesteps
+
+100 ns
+125 ns
+187 ns
+250 ns
+312 ns
+375 ns
+500 0.001
+750 0.01
+1000 0.01
+
+
+Base
+5 times in a row stable for 5000 timesteps
+100 ns
+125 ns
+187 ns
+250 ns
+312 ns
+375 0.00005
+500 0.001
+750 0.005
+1000 0.005
+
+Matrix 250 noise 0.01
+Matrix 500 noise 0.01
+
+
+Thesis goals in the report
+13 or 14h at 4th of march
+10h at 13th of march.
+expantion space with larger dimention ituitively you get a posibility for a woubled patato like shape with dents and hubs.
+future work adding patterns. reuse old incrementing learning method. figure out how to load these patterns.
+
+goal of the research needs to be there
+
+
+Xavier from pourcell
+steven herbert phd student.
+joris postmus

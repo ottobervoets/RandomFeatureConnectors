@@ -242,21 +242,21 @@ def simulate_experiment(parameters):
 
 if __name__ == "__main__":
 
-    path = "../res/matlab_maandag"
-    process_csv_files(path)
-    plot_nrmse_from_json(path)
-    plot_individual_scatterplots_by_rfc(path)
+    path = "../res/laat_res"
+    # process_csv_files(path)
+    # plot_nrmse_from_json(path)
+    # plot_individual_scatterplots_by_rfc(path)
 
     # arg_v = int(sys.argv[1])
     # arg_v = 8
-    # M_settings = [100, 125, 187, 250, 312, 375, 500]#, 750, 1000]
-    #750 en 1000 moeten nog.
+    # M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
+    M_settings = [500, 750, 1000]
 
-    # for M in M_settings:
-    # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems,
+    for M in M_settings:
+        perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems,
+                            M_SETTING=M)
+    # perform_experiments(folder_path=path, n_rep=5, experiment_function=predict_choatic_systems,
     #                     M_SETTING=187)
-    # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems,
-    #                     M_SETTING=250)
 
     # m_setting = M_settings[arg_v]
     # perform_experiments(folder_path=path, n_rep=30, experiment_function=predict_choatic_systems, M_SETTING=1)

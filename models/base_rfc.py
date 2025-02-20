@@ -78,7 +78,16 @@ class BaseRFC:
     def create_F(self, **kwargs):
         if self.verbose:
             print("created F from random normal")
-        return np.array(self.rng.normal(0, 1, (self.N, self.M)))
+        random_vectors = np.random.normal(size=(self.N, self.M))
+
+        norms = np.linalg.norm(random_vectors, axis=1, keepdims=True)
+
+        # Step 3: Normalize the vectors to have unit norm
+        unit_vectors = random_vectors / norms
+        # print(np.shape(unit_vectors), "unti vectors")
+
+        return unit_vectors
+        # return np.array(self.rng.normal(0, 1, (self.N, self.M)))
 
     def create_G(self, **kwargs):
         if self.verbose:
@@ -257,6 +266,7 @@ class BaseRFC:
         self.print_NRMSEs(z_recordings, r_recordings, p_recordings)
 
     def record_chaotic(self, length, pattern_name):
+        self.plot_conceptors()
         _, y_recording = self.hallucinating(length=length, pattern_name=pattern_name, record_internal=False,
                                             record_y=True)
         return y_recording

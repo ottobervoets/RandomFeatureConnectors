@@ -98,22 +98,23 @@ excluded_parameters = [
     'beta_W_out',
     'beta_G',
     'beta_d',
-    'aperture_rossler_attractor',
-    'aperture_lorenz_attractor',
-    'aperture_mackey_glass',
-    'aperture_henon_attractor',
+    'aperture_rossler_attractor_2d',
+    'aperture_lorenz_attractor_2d',
+    'aperture_mackey_glass_2d',
+    'aperture_henon_attractor_2d',
     'spectral_radius',
     'noise_std',
     'signal_noise',
     'max_n_features',
     'W_in_std',
     'W_sr',
-    'beta_D'
+    'beta_D',
+    'b_std'
 ]
 
 
 # Example usage
-folder_path = ("../../res/optimize_different_M_2")  # Replace with your folder path
+folder_path = ("../../res/matlab_woensdag")  # Replace with your folder path
 plot_parameter_evolution_by_M(folder_path, exclude_params=excluded_parameters)
 
 

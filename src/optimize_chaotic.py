@@ -122,8 +122,8 @@ def optimize_parameters_chaotic(parameters_to_optimize, default_parms, optimizat
     now = datetime.now()
     default_settings = {
         # 'experiment_name': "../res/" + now.strftime("%Y-%m-%d %H:%M:%S") + f"_{optimized_params['N']}" + ".csv",
-        'experiment_name': f"../res/{optimized_params['rfc_type']}_{optimized_params['N']}.csv",
-        'cycles': 3,
+        'experiment_name': f"../res/{optimized_params['rfc_type']}_{optimized_params['N']}_tuesday.csv",
+        'cycles': 5,
         'n_rep': 5
     }
     optimized_params = {**optimized_params, **default_settings}
@@ -182,15 +182,15 @@ def write_experiment_results(results, filename):
 
 
 if __name__ == "__main__":
-    arg_v = int(sys.argv[1])
-    # arg_v = 3
-    M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
-    default_parmas_chaotic['M'] = M_settings[arg_v]
-    default_parmas_chaotic['N'] = 250
-    default_parmas_chaotic['rfc_type'] = 'PCARFC'
-    default_parmas_chaotic['max_n_features'] = np.min([default_parmas_chaotic['N'], default_parmas_chaotic['M']/4])
-    print(parameters_to_optimize.keys())
-    optimize_parameters_chaotic(parameters_to_optimize=parameters_to_optimize, default_parms=default_parmas_chaotic,
+    # arg_v = int(sys.argv[1])
+    # arg_v = 0
+    # M_settings = [100, 125, 187, 250, 312, 375, 500, 750, 1000]
+    # default_parmas_chaotic['M'] = M_settings[arg_v]
+    # default_parmas_chaotic['N'] = 250
+    # default_parmas_chaotic['rfc_type'] = 'PCARFC'
+    # default_parmas_chaotic['max_n_features'] = np.min([default_parmas_chaotic['N'], default_parmas_chaotic['M']/4])
+    # print(parameters_to_optimize.keys())
+    optimize_parameters_chaotic(parameters_to_optimize=parameters_to_optimize_matrix, default_parms=default_parmas_matrix_500,
                                 optimization_settings=optimization_settings)
 
     # default_parmas_chaotic['rfc_type'] = 'base_RFC'
